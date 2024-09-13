@@ -4,37 +4,57 @@ namespace WordMate
 {
     public partial class MainPage : ContentPage
     {
+        Grid grid, gr;
+        ScrollView scrollView;
+        Image logo, profile;
+        String UserLevel = "Level";
+
         public MainPage()
         {
-            var grid = new Grid
+            grid = new Grid
             {
                 RowDefinitions =
                 {
-                    new RowDefinition { Height = new GridLength(60) },
+                    new RowDefinition { Height = new GridLength(70) },
+                    new RowDefinition { Height = new GridLength(50) },
                     new RowDefinition { Height = GridLength.Star },
-                    new RowDefinition { Height = new GridLength(50) }
+                    new RowDefinition { Height = new GridLength(50) } 
                 }
-
             };
 
-            var header = new StackLayout
+            logo = new Image
             {
-                BackgroundColor = Colors.LightGray,
-                Padding = 10,
-                Children =
-                {
-                    new Label
-                    {
-                        Text = "Header",
-                        HorizontalOptions = LayoutOptions.Center,
-                        VerticalOptions = LayoutOptions.Center
-                    }
-                }
+                Source = "wordmatemain.png",
+                HeightRequest = 50,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center           
             };
-            grid.Add(header, 0, 0);
+            grid.Add(logo, 0, 0);
 
-            var scrollView = new ScrollView();
-            var contentStack = new StackLayout
+            gr = new Grid
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition { Width = GridLength.Auto },
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Auto },
+                },
+            };
+            
+
+            profile = new Image
+            {
+                Source = "profile.png",
+                HeightRequest = 50,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+            gr.Add(profile, 0, 0);
+            //gr.Add(CurrentLevel, 1, 0);
+            grid.Add(gr, 0, 1);
+
+            scrollView = new ScrollView();
+            StackLayout contentStack = new StackLayout
             {
                 Padding = 10,
                 Children =
@@ -48,10 +68,9 @@ namespace WordMate
                 }
             };
             scrollView.Content = contentStack;
-            grid.Add(scrollView, 0, 1);
+            grid.Add(scrollView, 0, 2);
 
-            // Footer
-            var footer = new StackLayout
+            StackLayout footer = new StackLayout
             {
                 BackgroundColor = Colors.LightGray,
                 Padding = 10,
@@ -65,11 +84,16 @@ namespace WordMate
                     }
                 }
             };
-            grid.Add(footer, 0, 2);
+            grid.Add(footer, 0, 3);
+            Image lessons = new Image
+            {
+                Source = "lessons.png",
+                HeightRequest = 50,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
 
             Content = grid;
         }
-
     }
-
 }
