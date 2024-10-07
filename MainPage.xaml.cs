@@ -7,7 +7,6 @@ namespace WordMate
         Grid grid, gr;
         ScrollView scrollView;
         Image logo, profile;
-        String UserLevel = "Level";
 
         public MainPage()
         {
@@ -41,7 +40,6 @@ namespace WordMate
                 },
             };
             
-
             profile = new Image
             {
                 Source = "profile.png",
@@ -59,12 +57,10 @@ namespace WordMate
                 Padding = 10,
                 Children =
                 {
-                    new Label { Text = "This is the content area.", FontSize = 20, VerticalOptions = LayoutOptions.Start },
-                    new Label { Text = "More content...", FontSize = 20, VerticalOptions = LayoutOptions.Start },
-                    new Label { Text = "Even more content...", FontSize = 20, VerticalOptions = LayoutOptions.Start },
-                    new Label { Text = "And more content to scroll.", FontSize = 20, VerticalOptions = LayoutOptions.Start },
-                    new Label { Text = "Still more content!", FontSize = 20, VerticalOptions = LayoutOptions.Start },
-                    new Label { Text = "You get the idea!", FontSize = 20, VerticalOptions = LayoutOptions.Start }
+                    new Label 
+                    {
+                        Text = "fnsdjnj",
+                    }
                 }
             };
             scrollView.Content = contentStack;
