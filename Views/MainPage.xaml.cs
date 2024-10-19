@@ -3,6 +3,7 @@ using System.IO;
 using WordMate.Data;
 using WordMate.Models;
 using WordMate.Views.Components;
+using System.Threading.Tasks;
 
 namespace WordMate.Views;
 public partial class MainPage : ContentPage
@@ -10,6 +11,7 @@ public partial class MainPage : ContentPage
     private WordDB _wordDB;
     private CategoryGrid _categoryGrid;
     private AllWordsListView _allWordsListView;
+    private WordsReviewSection _wordsReviewSection;
     public MainPage()
     {
         var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WordMate.db3");
@@ -28,11 +30,19 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         await InitializeDB();
+        await LoadWordsForReview();
+        await LoadAllWords();
     }
 
     private async Task InitializeDB()
     {
         await _wordDB.InitializeDatabase(); 
+    }
+
+    private async Task LoadWordsForReview()
+    {
+        var reviewWords = await _wordDB.WordManager.GetWordsByCategory(2);
+        _wordsReviewSection.SetWords(reviewWords);
     }
 
     private async Task LoadAllWords()
@@ -48,14 +58,14 @@ public partial class MainPage : ContentPage
         var headerView = new HeaderView();
 
         _categoryGrid = new CategoryGrid(_wordDB);
-        var wordsReviewCarousel = new WordsReviewCarousel(_wordDB);
+        _wordsReviewSection = new WordsReviewSection();
         _allWordsListView = new AllWordsListView(_wordDB, OnWordAdded);
         var mainContent = new StackLayout
         {
             Children =
             {
                 _categoryGrid,
-                wordsReviewCarousel,
+                _wordsReviewSection,
                 _allWordsListView,
             }
         };
