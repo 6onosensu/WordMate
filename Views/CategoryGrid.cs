@@ -51,7 +51,6 @@ public class CategoryGrid : Grid
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center
         };
-
         _categoryLabels[category.Id] = categoryLabel;
 
         var categoryFrame = new Frame
@@ -64,6 +63,13 @@ public class CategoryGrid : Grid
                 Children = { categoryLabel }
             }
         };
+
+        var tapGR = new TapGestureRecognizer();
+        tapGR.Tapped += (s, e) =>
+        {
+            Navigation.PushAsync(new WordListPage(_wordDB, category.Id));
+        };
+        categoryFrame.GestureRecognizers.Add(tapGR);
 
         Children.Add(categoryFrame);
         Grid.SetColumn(categoryFrame, columnIndex);
