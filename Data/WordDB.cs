@@ -16,13 +16,14 @@ namespace WordMate.Data
             _connection.CreateTableAsync<Word>().Wait();
             _connection.CreateTableAsync<Category>().Wait();
 
-            WordManager = new WordManagementDB(_connection);
             CategoryManager = new CategoryManagementDB(_connection);
+            WordManager = new WordManagementDB(_connection, CategoryManager);
         }
 
         public async Task InitializeDatabase()
         {
             await CategoryManager.InitializeCategories();
+            await WordManager.AddSampleWords();
         }
     }
 }

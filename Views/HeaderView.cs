@@ -12,6 +12,13 @@ public class HeaderView : StackLayout
             VerticalOptions = LayoutOptions.Start
         };
 
+        var tapGestureRecognizer = new TapGestureRecognizer();
+        tapGestureRecognizer.Tapped += async (s, e) =>
+        {
+            Navigation.PopAsync();
+        };
+        logo.GestureRecognizers.Add(tapGestureRecognizer);
+
         this.Children.Add(logo);
         this.VerticalOptions = LayoutOptions.Start;
     }

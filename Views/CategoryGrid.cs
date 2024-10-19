@@ -2,15 +2,16 @@
 using WordMate.Models;
 using WordMate.Data;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace WordMate.Views;
 public class CategoryGrid : Grid
 {
     private WordDB _wordDB;
+    private Dictionary<int, Label> _categoryLabels;
     public CategoryGrid(WordDB wordDB)
     {
         _wordDB = wordDB;
+        _categoryLabels = new Dictionary<int, Label>();
 
         ColumnDefinitions = new ColumnDefinitionCollection
         {
@@ -21,48 +22,57 @@ public class CategoryGrid : Grid
 
         LoadCategories();
     }
-    private async void LoadCategories()
+    public async void Refresh()
     {
-        try
+        await LoadCategories(); 
+    }
+    private async Task LoadCategories()
+    {
+        List<Category> categories = await _wordDB.CategoryManager.GetCategories();
+
+        for (int i = 0; i < categories.Count && i < 3; i++)
         {
-            List<Category> categories = await _wordDB.CategoryManager.GetCategories();
-            Console.WriteLine($"Categories loaded: {categories.Count}");
-            for (int i = 0; i < categories.Count && i < 3; i++)
+            if (_categoryLabels.ContainsKey(categories[i].Id))
+            {
+                UpdateCategoryLabel(categories[i]);
+            }
+            else
             {
                 AddCategoryToGrid(categories[i], i);
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading categories: {ex.Message}");
-        }
     }
     private void AddCategoryToGrid(Category category, int columnIndex)
     {
-        var categoryFrame = CreateCategoryLbl(category.Name, category.WordsCount);
-        Children.Add(categoryFrame);
-        Grid.SetColumn(categoryFrame, columnIndex);
-    }
-    private Frame CreateCategoryLbl(string categoryName, int wordCount)
-    {
-        return new Frame
+        var categoryLabel = new Label
+        {
+            Text = $"{category.Name} ({category.WordsCount})",
+            FontSize = 14,
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        _categoryLabels[category.Id] = categoryLabel;
+
+        var categoryFrame = new Frame
         {
             BorderColor = Color.FromHex("ffbd59"),
             CornerRadius = 0,
             VerticalOptions = LayoutOptions.Center,
             Content = new StackLayout
             {
-                Children =
-                {
-                    new Label
-                    {
-                        Text = $"{categoryName} ({wordCount})",
-                        FontSize = 14,
-                        HorizontalOptions = LayoutOptions.Center,
-                        VerticalOptions = LayoutOptions.Center
-                    }
-                }
+                Children = { categoryLabel }
             }
         };
+
+        Children.Add(categoryFrame);
+        Grid.SetColumn(categoryFrame, columnIndex);
+    }
+    private void UpdateCategoryLabel(Category category)
+    {
+        if (_categoryLabels.TryGetValue(category.Id, out var categoryLabel))
+        {
+            categoryLabel.Text = $"{category.Name} ({category.WordsCount})";
+        }
     }
 }

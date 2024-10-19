@@ -32,7 +32,7 @@ public class CategoryManagementDB
 
     public async Task ChangeWordCategory(Guid wordId, int newCategoryId)
     {
-        var wordManagementDB = new WordManagementDB(_connection);
+        var wordManagementDB = new WordManagementDB(_connection, this);
         var word = await wordManagementDB.GetWordById(wordId);
 
         if (word != null)
@@ -54,7 +54,7 @@ public class CategoryManagementDB
 
         if (category != null)
         {
-            var wordManagementDB = new WordManagementDB(_connection);
+            var wordManagementDB = new WordManagementDB(_connection, this);
             category.WordsCount = await wordManagementDB.CountWordsInCategory(categoryId);
             await _connection.UpdateAsync(category);
         }

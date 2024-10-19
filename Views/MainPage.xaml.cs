@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-using System.Data;
+using System.IO;
 using WordMate.Data;
 using WordMate.Models;
 
@@ -7,6 +7,8 @@ namespace WordMate.Views;
 public partial class MainPage : ContentPage
 {
     private WordDB _wordDB;
+    private CategoryGrid _categoryGrid;
+    private AllWordsListView _allWordsListView;
     public MainPage()
     {
         var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WordMate.db3");
@@ -20,20 +22,40 @@ public partial class MainPage : ContentPage
 
         SetupPage();
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await InitializeDB();
+    }
+
+    private async Task InitializeDB()
+    {
+        await _wordDB.InitializeDatabase(); 
+    }
+
+    private async Task LoadAllWords()
+    {
+        var allWords = await _wordDB.WordManager.GetWords();
+
+        _allWordsListView = new AllWordsListView(_wordDB, OnWordAdded);
+        _allWordsListView.SetWordsSource(allWords);
+    }
+
     private void SetupPage()
     {
         var headerView = new HeaderView();
 
-        var categoryGrid = new CategoryGrid(_wordDB);
+        _categoryGrid = new CategoryGrid(_wordDB);
         var wordsReviewCarousel = new WordsReviewCarousel();
-        var allWordsListView = new AllWordsListView();
+        _allWordsListView = new AllWordsListView(_wordDB, OnWordAdded);
         var mainContent = new StackLayout
         {
             Children =
             {
-                categoryGrid,
+                _categoryGrid,
                 wordsReviewCarousel,
-                allWordsListView,
+                _allWordsListView,
             }
         };
         var scrollView = new ScrollView
@@ -57,5 +79,12 @@ public partial class MainPage : ContentPage
         grid.Add(footerView, 0, 2);
 
         Content = grid;
+    }
+    private async void OnWordAdded()
+    {
+        _categoryGrid.Refresh();
+
+        var allWords = await _wordDB.WordManager.GetWords();
+        _allWordsListView.SetWordsSource(allWords);
     }
 }

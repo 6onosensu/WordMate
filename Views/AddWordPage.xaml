@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:WordMate.Views"
+             x:Class="WordMate.Views.AddWordPage"
+             Title="Add New Word">
+    
+    <StackLayout Padding="20" Spacing="15">
+        <local:HeaderView />
+        <Label Text="Word"
+               FontSize="16"
+               TextColor="#ffbd59" 
+               FontAttributes="Bold" />
+
+        <Entry x:Name="WordEntry" 
+               Placeholder="Enter the word"
+               BackgroundColor="#f0f0f0"
+               TextColor="Black"
+               FontSize="14"
+               HeightRequest="40"
+               HorizontalOptions="FillAndExpand" />
+
+        <Label Text="Translation"
+               FontSize="16"
+               TextColor="#ffbd59" 
+               FontAttributes="Bold" />
+
+        <Entry x:Name="TranslationEntry" 
+               Placeholder="Enter the translation"
+               BackgroundColor="#f0f0f0"
+               TextColor="Black"
+               FontSize="14"
+               HeightRequest="40"
+               HorizontalOptions="FillAndExpand" />
+
+        <Label Text="Definition"
+               FontSize="16"
+               TextColor="#ffbd59" 
+               FontAttributes="Bold" />
+
+        <Entry x:Name="DefinitionEntry" 
+               Placeholder="Enter the definition"
+               BackgroundColor="#f0f0f0"
+               TextColor="Black"
+               FontSize="14"
+               HeightRequest="40"
+               HorizontalOptions="FillAndExpand" />
+
+        <Button Text="Save Word"
+                TextColor="White"
+                BackgroundColor="#ffbd59"
+                FontSize="16"
+                HeightRequest="50"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                HorizontalOptions="FillAndExpand"
+                Clicked="OnSaveWordClicked" />
+
+
+    </StackLayout>
+</ContentPage>

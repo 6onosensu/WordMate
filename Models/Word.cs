@@ -16,8 +16,6 @@ namespace WordMate.Models
         public int CategoryId { get; set; }
         public int SuccessCount { get; set; }
 
-        [Ignore]
-        public Category Category { get; set; }
         public Word()
         {
             Id = Guid.NewGuid();
