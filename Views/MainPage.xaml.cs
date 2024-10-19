@@ -2,6 +2,7 @@
 using System.IO;
 using WordMate.Data;
 using WordMate.Models;
+using WordMate.Views.Components;
 
 namespace WordMate.Views;
 public partial class MainPage : ContentPage
@@ -47,7 +48,7 @@ public partial class MainPage : ContentPage
         var headerView = new HeaderView();
 
         _categoryGrid = new CategoryGrid(_wordDB);
-        var wordsReviewCarousel = new WordsReviewCarousel();
+        var wordsReviewCarousel = new WordsReviewCarousel(_wordDB);
         _allWordsListView = new AllWordsListView(_wordDB, OnWordAdded);
         var mainContent = new StackLayout
         {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Maui.Controls;
 
-namespace WordMate.Views;
+namespace WordMate.Views.Components;
 public class FooterView : StackLayout
 {
-    public FooterView() 
+    public FooterView()
     {
         var learnBtn = new Button
         {
@@ -12,8 +12,8 @@ public class FooterView : StackLayout
             HeightRequest = 50,
             WidthRequest = 150,
             FontAttributes = FontAttributes.Bold,
-            BackgroundColor = Colors.WhiteSmoke,
-            TextColor = Colors.Black
+            BackgroundColor = Colors.White,
+            TextColor = Color.FromHex("ffde59")
         };
 
         var playBtn = new Button
@@ -23,8 +23,8 @@ public class FooterView : StackLayout
             HeightRequest = 50,
             WidthRequest = 150,
             FontAttributes = FontAttributes.Bold,
-            BackgroundColor = Colors.WhiteSmoke,
-            TextColor = Colors.Black
+            BackgroundColor = Colors.White,
+            TextColor = Color.FromHex("ffde59")
         };
 
         var spacer = new BoxView
@@ -39,16 +39,16 @@ public class FooterView : StackLayout
             HorizontalOptions = LayoutOptions.FillAndExpand
         };
 
-        this.Orientation = StackOrientation.Horizontal;
-        this.HorizontalOptions = LayoutOptions.FillAndExpand;
-        this.VerticalOptions = LayoutOptions.Center;
-        this.BackgroundColor = Color.FromHex("ffbd59");
-        this.HeightRequest = 60;
-        this.Spacing = 10;
+        Orientation = StackOrientation.Horizontal;
+        HorizontalOptions = LayoutOptions.FillAndExpand;
+        VerticalOptions = LayoutOptions.Center;
+        BackgroundColor = Color.FromHex("ffde59");
+        HeightRequest = 60;
+        Spacing = 10;
 
-        this.Children.Add(spacer);
-        this.Children.Add(learnBtn);
-        this.Children.Add(playBtn);
-        this.Children.Add(spacer1);
+        Children.Add(spacer);
+        Children.Add(learnBtn);
+        Children.Add(playBtn);
+        Children.Add(spacer1);
     }
 }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using WordMate.Models;
 using System.Linq;
 using WordMate.Data;
+using WordMate.Views.Pages;
 
-namespace WordMate.Views;
+namespace WordMate.Views.Components;
 public class AllWordsListView : StackLayout
 {
     private Entry _searchEntry;
@@ -26,17 +27,13 @@ public class AllWordsListView : StackLayout
         };
         _searchEntry.TextChanged += OnSearchTextChanged;
 
-        _allWordsLbl = new Label
-        {
-            Text = "All my words (0): ",
-            FontSize = 20
-        };
+        _allWordsLbl = new Label { FontSize = 22 };
 
         _addWordButton = new Button
         {
             Text = "Add New Word",
-            FontSize = 16,
-            HeightRequest = 40,
+            FontSize = 14,
+            HeightRequest = 38,
             HorizontalOptions = LayoutOptions.End,
             BackgroundColor = Color.FromHex("ffbd59"),
             TextColor = Colors.White
@@ -62,7 +59,7 @@ public class AllWordsListView : StackLayout
                 {
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Start,
-                    FontSize = 16
+                    FontSize = 18
                 };
                 wordAndTranslationLbl.SetBinding(Label.TextProperty, new Binding("Text"));
 
@@ -70,7 +67,7 @@ public class AllWordsListView : StackLayout
                 {
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Start,
-                    FontSize = 16,
+                    FontSize = 18,
                     IsVisible = false
                 };
                 definitionLbl.SetBinding(Label.TextProperty, "Definition");
@@ -78,13 +75,14 @@ public class AllWordsListView : StackLayout
                 var editBtn = new Button
                 {
                     Text = "Edit",
-                    FontSize = 16,
-                    HeightRequest = 40,
-                    TextColor = Colors.WhiteSmoke,
-                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 14,
+                    HeightRequest = 38,
+                    TextColor = Colors.Black,
                     BackgroundColor = Color.FromHex("ffea94"),
                     HorizontalOptions = LayoutOptions.End
                 };
+                editBtn.SetBinding(Button.BindingContextProperty, new Binding("."));
+                editBtn.Clicked += OnEditBtnClicked;
 
                 var tapGR = new TapGestureRecognizer();
                 tapGR.Tapped += (s, e) =>
@@ -112,16 +110,26 @@ public class AllWordsListView : StackLayout
             })
         };
 
-        this.Children.Add(_searchEntry);
-        this.Children.Add(headerGrid);
-        this.Children.Add(_wordsListView);
-        this.Padding = 15;
-        this.Spacing = 10;
+        Children.Add(_searchEntry);
+        Children.Add(headerGrid);
+        Children.Add(_wordsListView);
+        Padding = 15;
+        Spacing = 10;
+
+        LoadWordsAsync();
+    }
+
+    private async void OnEditBtnClicked(object? sender, EventArgs e)
+    {
+        if (sender is Button editButton && editButton.BindingContext is Word selectedWord)
+        {
+            await Navigation.PushAsync(new EditWordPage(_wordDB, selectedWord));
+        }
     }
 
     public void SetWordsSource(IEnumerable<Word> words)
     {
-        _allWords = words.ToList(); 
+        _allWords = words.ToList();
         UpdateWordsList(_allWords);
     }
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
@@ -147,5 +155,10 @@ public class AllWordsListView : StackLayout
     private async void OnAddWordClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new AddWordPage(_wordDB, _onWordAdded));
+    }
+    private async Task LoadWordsAsync()
+    {
+        var words = await _wordDB.WordManager.GetWords();
+        SetWordsSource(words);
     }
 }

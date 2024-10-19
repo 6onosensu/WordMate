@@ -64,19 +64,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\AddWordPage.xaml">
+	  <MauiXaml Update="Views\Pages\AddWordPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\LearningPage.xaml">
+	  <MauiXaml Update="Views\Pages\EditWordPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\PlayPage.xaml">
+	  <MauiXaml Update="Views\Pages\LearningPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ReviewPage.xaml">
+	  <MauiXaml Update="Views\Pages\PlayPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\WordListPage.xaml">
+	  <MauiXaml Update="Views\Pages\ReviewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\WordListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

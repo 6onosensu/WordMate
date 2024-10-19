@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
 
-namespace WordMate.Views;
+namespace WordMate.Views.Components;
 public class HeaderView : StackLayout
 {
     public HeaderView()
@@ -19,7 +19,7 @@ public class HeaderView : StackLayout
         };
         logo.GestureRecognizers.Add(tapGestureRecognizer);
 
-        this.Children.Add(logo);
-        this.VerticalOptions = LayoutOptions.Start;
+        Children.Add(logo);
+        VerticalOptions = LayoutOptions.Start;
     }
 }

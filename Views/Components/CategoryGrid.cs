@@ -3,7 +3,7 @@ using WordMate.Models;
 using WordMate.Data;
 using System.Collections.Generic;
 
-namespace WordMate.Views;
+namespace WordMate.Views.Components;
 public class CategoryGrid : Grid
 {
     private WordDB _wordDB;
@@ -24,7 +24,7 @@ public class CategoryGrid : Grid
     }
     public async void Refresh()
     {
-        await LoadCategories(); 
+        await LoadCategories();
     }
     private async Task LoadCategories()
     {

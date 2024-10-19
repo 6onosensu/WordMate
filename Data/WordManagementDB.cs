@@ -121,4 +121,9 @@ public class WordManagementDB
         }
         
     }
+
+    public async Task DeleteWord(Guid id)
+    {
+        await _connection.DeleteAsync<Word>(id);
+    }
 }

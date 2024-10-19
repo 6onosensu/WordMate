@@ -5,16 +5,20 @@ using Microsoft.Maui.Controls;
 using WordMate.Models;
 using System.Collections.Generic;
 using System.Linq;
+using WordMate.Data;
 
-namespace WordMate.Views;
+namespace WordMate.Views.Components;
 public class WordsReviewCarousel : StackLayout
 {
-    public WordsReviewCarousel()
+    private WordDB _wordDB;
+    public WordsReviewCarousel(WordDB wordDB)
     {
+        _wordDB = wordDB;
+
         var wordsOnReview = new Label
         {
             Text = "Words on Review",
-            FontSize = 20,
+            FontSize = 22,
             HorizontalOptions = LayoutOptions.Center
         };
 
@@ -64,17 +68,17 @@ public class WordsReviewCarousel : StackLayout
             HorizontalOptions = LayoutOptions.Center
         };
 
-        this.Children.Add(wordsOnReview);
-        this.Children.Add(wordsCarousel);
-        this.Children.Add(recallBtn);
+        Children.Add(wordsOnReview);
+        Children.Add(wordsCarousel);
+        Children.Add(recallBtn);
 
-        this.Spacing = 10;
-        this.Margin = 10;
-        this.HorizontalOptions = LayoutOptions.Center;
+        Spacing = 10;
+        Margin = 10;
+        HorizontalOptions = LayoutOptions.Center;
     }
 
     public void SetWordsSource(IEnumerable<object> words)
     {
-        ((CarouselView)this.Children[1]).ItemsSource = words;
+        ((CarouselView)Children[1]).ItemsSource = words;
     }
 }

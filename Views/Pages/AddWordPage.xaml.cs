@@ -3,7 +3,7 @@ using System;
 using WordMate.Data;
 using WordMate.Models;
 
-namespace WordMate.Views;
+namespace WordMate.Views.Pages;
 
 public partial class AddWordPage : ContentPage
 {

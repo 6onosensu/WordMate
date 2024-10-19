@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:WordMate.Views.Components"
+             x:Class="WordMate.Views.Pages.EditWordPage"
+             Title="Edit Word">
+    <StackLayout Padding="20" Spacing="15">
+        <local:HeaderView />
+        
+        <Label Text="Word" FontSize="20" TextColor="#ffbd59" FontAttributes="Bold" />
+        <Label x:Name="WordLabel" FontSize="18" />
+
+        <Label Text="Translation" FontSize="18" TextColor="#ffbd59" FontAttributes="Bold" />
+        <Label x:Name="TranslationLabel" FontSize="16" />
+
+        <Label Text="Definition" FontSize="16" TextColor="#ffbd59" FontAttributes="Bold" />
+        <Label x:Name="DefinitionLabel" FontSize="14" />
+
+        <StackLayout x:Name="ActionButtonsContainer" Orientation="Horizontal" Spacing="10">
+            <Button Text="Edit" Clicked="OnEditClicked" 
+                    HeightRequest="40"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BackgroundColor="#ffea94" />
+            <Button Text="Delete" Clicked="OnDeleteClicked"
+                    HeightRequest="40"
+                    TextColor="White"
+                    BackgroundColor="#ffbd59" />
+        </StackLayout>
+
+        <StackLayout x:Name="EditContainer" IsVisible="False" Spacing="15">
+            <Entry x:Name="EditWordEntry" Placeholder="Enter new word" />
+            <Entry x:Name="EditTranslationEntry" Placeholder="Enter new translation" />
+            <Entry x:Name="EditDefinitionEntry" Placeholder="Enter new definition" />
+
+            <Button 
+                    Text="Save" Clicked="OnSaveClicked" 
+                    HeightRequest="40"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BackgroundColor="#ffea94" />
+            <Button 
+                    Text="Cancel" Clicked="OnCancelEditClicked" 
+                    HeightRequest="40"
+                    TextColor="White"
+                    BackgroundColor="#ffbd59" />
+        </StackLayout>
+
+    </StackLayout>
+</ContentPage>
