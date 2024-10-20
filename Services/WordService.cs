@@ -67,7 +67,7 @@ namespace WordMate.Services
             return true;
         }
         private async Task UpdateCategoryAndRefreshUI(int categoryId)
-        {
+        {//// может быть дело в возращении на страницу обратно (надо узнать как работает возращению на страницу заного ли он отрисовывает)
             await _categoryMDB.UpdateWordCountForCategory(categoryId);
 
             var refreshManager = new RefreshManager(_wordDB);
