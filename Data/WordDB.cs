@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using System.Threading.Tasks;
 using WordMate.Models;
+using WordMate.Services;
 
 namespace WordMate.Data
 {
@@ -9,6 +10,7 @@ namespace WordMate.Data
         private readonly SQLiteAsyncConnection _connection;
         public WordManagementDB WordManager { get; private set; }
         public CategoryManagementDB CategoryManager { get; private set; }
+        public WordService WordService { get; private set; }
 
         public WordDB(string dbPath)
         {
@@ -18,12 +20,13 @@ namespace WordMate.Data
 
             CategoryManager = new CategoryManagementDB(_connection);
             WordManager = new WordManagementDB(_connection, CategoryManager);
+            WordService = new WordService(this);
         }
 
         public async Task InitializeDatabase()
         {
             await CategoryManager.InitializeCategories();
-            await WordManager.AddSampleWords();
+            await WordService.AddSampleWords();
         }
     }
 }

@@ -38,6 +38,7 @@ public partial class AddWordPage : ContentPage
         await _wordDB.WordManager.SaveWord(newWord);
         _onWordAdded?.Invoke();
         await DisplayAlert("Success", "Word added successfully!", "OK");
+
         await Navigation.PopAsync();
     }
 }

@@ -66,7 +66,7 @@ namespace WordMate.Views.Pages
             bool confirm = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this word?", "Yes", "No");
             if (confirm)
             {
-                await _wordDB.WordManager.DeleteWord(_word.Id);
+                await _wordDB.WordService.DeleteWordAsync(_word.Id);
                 await DisplayAlert("Success", "Word deleted successfully!", "OK");
 
                 await Navigation.PopAsync();

@@ -7,6 +7,11 @@ namespace WordMate.Views.Components
     {
         public WordCarouselView()
         {
+            ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Horizontal)
+            {
+                ItemSpacing = 10 
+            };
+
             ItemTemplate = new DataTemplate(() =>
             {
                 var wordLbl = new Label 
@@ -34,7 +39,7 @@ namespace WordMate.Views.Components
                 {
                     CornerRadius = 10,
                     Padding = 10,
-                    WidthRequest = 350,
+                    WidthRequest = 300,
                     BorderColor = Color.FromHex("ffbd59"),
                     BackgroundColor = Colors.White,
                     
@@ -50,6 +55,7 @@ namespace WordMate.Views.Components
                     Spacing = 10,
                 };
             });
+            IsBounceEnabled = false;
         }
 
         public void SetWordsSource(IEnumerable<Word> words)

@@ -54,8 +54,10 @@ public class CategoryManagementDB
 
         if (category != null)
         {
-            var wordManagementDB = new WordManagementDB(_connection, this);
-            category.WordsCount = await wordManagementDB.CountWordsInCategory(categoryId);
+            category.WordsCount = await _connection.Table<Word>()
+            .Where(w => w.CategoryId == categoryId)
+            .CountAsync();
+
             await _connection.UpdateAsync(category);
         }
     }

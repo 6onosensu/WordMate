@@ -55,13 +55,13 @@ public class AllWordsListView : StackLayout
         {
             ItemTemplate = new DataTemplate(() =>
             {
-                var wordAndTranslationLbl = new Label
+                var wordLbl = new Label
                 {
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Start,
                     FontSize = 18
                 };
-                wordAndTranslationLbl.SetBinding(Label.TextProperty, new Binding("Text"));
+                wordLbl.SetBinding(Label.TextProperty, "Text");
 
                 var definitionLbl = new Label
                 {
@@ -81,17 +81,8 @@ public class AllWordsListView : StackLayout
                     BackgroundColor = Color.FromHex("ffea94"),
                     HorizontalOptions = LayoutOptions.End
                 };
-                editBtn.SetBinding(Button.BindingContextProperty, new Binding("."));
+                editBtn.SetBinding(Button.BindingContextProperty, ".");
                 editBtn.Clicked += OnEditBtnClicked;
-
-                var tapGR = new TapGestureRecognizer();
-                tapGR.Tapped += (s, e) =>
-                {
-                    definitionLbl.IsVisible = !definitionLbl.IsVisible;
-                };
-
-                wordAndTranslationLbl.GestureRecognizers.Add(tapGR);
-                definitionLbl.GestureRecognizers.Add(tapGR);
 
                 var grid = new Grid
                 {
@@ -102,11 +93,18 @@ public class AllWordsListView : StackLayout
                     }
                 };
 
-                grid.Add(wordAndTranslationLbl, 0, 0);
+                grid.Add(wordLbl, 0, 0);
                 grid.Add(definitionLbl, 0, 0);
                 grid.Add(editBtn, 1, 0);
 
-                return new ViewCell { View = grid };
+                var viewCell = new ViewCell { View = grid };
+                viewCell.Tapped += (s, e) =>
+                {
+                    wordLbl.IsVisible = !wordLbl.IsVisible;
+                    definitionLbl.IsVisible = !definitionLbl.IsVisible;
+                };
+
+                return viewCell;
             })
         };
 
@@ -156,7 +154,7 @@ public class AllWordsListView : StackLayout
     {
         await Navigation.PushAsync(new AddWordPage(_wordDB, _onWordAdded));
     }
-    private async Task LoadWordsAsync()
+    public async Task LoadWordsAsync()
     {
         var words = await _wordDB.WordManager.GetWords();
         SetWordsSource(words);
