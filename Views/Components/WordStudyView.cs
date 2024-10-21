@@ -86,6 +86,7 @@ namespace WordMate.Views.Components
 
         private void UpdateWordDisplay()
         {
+
             switch (_currentStage)
             {
                 case 1:

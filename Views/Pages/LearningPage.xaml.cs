@@ -35,9 +35,4 @@ public partial class LearningPage : ContentPage
         }
         return;
     }
-
-    private void SetLearnMethod()
-    {
-        return;
-    }
 }
