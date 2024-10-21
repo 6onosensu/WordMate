@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WordMate.Data;
 using WordMate.Models;
 
 namespace WordMate.Views.Components
@@ -13,10 +14,12 @@ namespace WordMate.Views.Components
         private Entry _inputEntry;
         private Button _nextBtn;
         private Word _currentWord;
+        private WordDB _wordDB;
         private int _currentStage = 0;
 
-        public WordStudyView(Word currentWord)
+        public WordStudyView(Word currentWord, WordDB wordDB)
         {
+            _wordDB = wordDB;
             _currentWord = currentWord;
 
             var headerView = new HeaderView();

@@ -72,7 +72,7 @@ public partial class MainPage : ContentPage
             Content = mainContent
         };
 
-        var footerView = new FooterView();
+        var footerView = new FooterView(_wordDB);
 
         var grid = new Grid
         {

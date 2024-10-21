@@ -1,9 +1,11 @@
 ﻿using Microsoft.Maui.Controls;
+using WordMate.Data;
 
 namespace WordMate.Views.Components;
 public class FooterView : StackLayout
 {
-    public FooterView()
+    private WordDB _wordDB;
+    public FooterView(WordDB wordDB)
     {
         var learnBtn = new Button
         {
@@ -56,11 +58,11 @@ public class FooterView : StackLayout
 
     private async void OnPlayBtnClicked(object? sender, EventArgs e)
     {
-        await Navigation.PushAsync(new PlayPage());
+        await Navigation.PushAsync(new PlayPage(_wordDB));
     }
 
     private async void OnLearnBtnClicked(object? sender, EventArgs e)
     {
-        await Navigation.PushAsync(new LearningPage());
+        await Navigation.PushAsync(new LearningPage(_wordDB));
     }
 }
