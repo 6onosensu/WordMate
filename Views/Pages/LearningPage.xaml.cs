@@ -4,7 +4,6 @@ using WordMate.Models;
 using WordMate.Services;
 
 namespace WordMate.Views;
-
 public partial class LearningPage : ContentPage
 {
 	private WordStudyView _cards;
