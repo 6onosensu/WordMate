@@ -44,9 +44,9 @@ public class WordsReviewSection : StackLayout
         HorizontalOptions = LayoutOptions.Center;
     }
 
-    private void OnRecallBtnClicked(object? sender, EventArgs e)
+    private async void OnRecallBtnClicked(object? sender, EventArgs e)
     {
-        
+        await Navigation.PushAsync(new ReviewPage());
     }
 
     public void SetWords(IEnumerable<Word> words)

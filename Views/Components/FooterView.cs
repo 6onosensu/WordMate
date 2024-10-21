@@ -15,6 +15,7 @@ public class FooterView : StackLayout
             BackgroundColor = Colors.White,
             TextColor = Color.FromHex("ffde59")
         };
+        learnBtn.Clicked += OnLearnBtnClicked;
 
         var playBtn = new Button
         {
@@ -26,6 +27,7 @@ public class FooterView : StackLayout
             BackgroundColor = Colors.White,
             TextColor = Color.FromHex("ffde59")
         };
+        playBtn.Clicked += OnPlayBtnClicked;
 
         var spacer = new BoxView
         {
@@ -50,5 +52,15 @@ public class FooterView : StackLayout
         Children.Add(learnBtn);
         Children.Add(playBtn);
         Children.Add(spacer1);
+    }
+
+    private async void OnPlayBtnClicked(object? sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new PlayPage());
+    }
+
+    private async void OnLearnBtnClicked(object? sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new LearningPage());
     }
 }
