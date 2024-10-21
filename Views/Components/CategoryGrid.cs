@@ -30,7 +30,7 @@ public class CategoryGrid : Grid
     {
         List<Category> categories = await _wordDB.CategoryManager.GetCategories();
 
-        for (int i = 0; i < categories.Count && i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (_categoryLabels.ContainsKey(categories[i].Id))
             {
@@ -44,14 +44,14 @@ public class CategoryGrid : Grid
     }
     private void AddCategoryToGrid(Category category, int columnIndex)
     {
-        var categoryLabel = new Label
+        var categoryLbl = new Label
         {
             Text = $"{category.Name} ({category.WordsCount})",
             FontSize = 14,
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center
         };
-        _categoryLabels[category.Id] = categoryLabel;
+        _categoryLabels[category.Id] = categoryLbl;
 
         var categoryFrame = new Frame
         {
@@ -60,7 +60,7 @@ public class CategoryGrid : Grid
             VerticalOptions = LayoutOptions.Center,
             Content = new StackLayout
             {
-                Children = { categoryLabel }
+                Children = { categoryLbl }
             }
         };
 

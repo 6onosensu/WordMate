@@ -12,14 +12,17 @@ public class HeaderView : StackLayout
             VerticalOptions = LayoutOptions.Start
         };
 
-        var tapGestureRecognizer = new TapGestureRecognizer();
-        tapGestureRecognizer.Tapped += async (s, e) =>
-        {
-            await Navigation.PopToRootAsync();
-        };
-        logo.GestureRecognizers.Add(tapGestureRecognizer);
+        var tapGR = new TapGestureRecognizer();
+        tapGR.Tapped += TapGRTapped;
+
+        logo.GestureRecognizers.Add(tapGR);
 
         Children.Add(logo);
         VerticalOptions = LayoutOptions.Start;
+    }
+
+    private async void TapGRTapped(object? sender, TappedEventArgs e)
+    {
+        await Navigation.PopToRootAsync();
     }
 }
