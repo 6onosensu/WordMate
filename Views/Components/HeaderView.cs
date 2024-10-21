@@ -15,7 +15,7 @@ public class HeaderView : StackLayout
         var tapGestureRecognizer = new TapGestureRecognizer();
         tapGestureRecognizer.Tapped += async (s, e) =>
         {
-            Navigation.PopAsync();
+            await Navigation.PopToRootAsync();
         };
         logo.GestureRecognizers.Add(tapGestureRecognizer);
 

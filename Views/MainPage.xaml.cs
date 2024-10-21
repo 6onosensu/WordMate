@@ -1,9 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
 using System.IO;
 using WordMate.Data;
-using WordMate.Models;
 using WordMate.Views.Components;
-using System.Threading.Tasks;
 
 namespace WordMate.Views;
 public partial class MainPage : ContentPage

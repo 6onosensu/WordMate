@@ -69,7 +69,7 @@ namespace WordMate.Views.Pages
                 await _wordDB.WordService.DeleteWordAsync(_word.Id);
                 await DisplayAlert("Success", "Word deleted successfully!", "OK");
 
-                await Navigation.PopAsync();
+                await Navigation.PopToRootAsync();
             }
         }
     }
