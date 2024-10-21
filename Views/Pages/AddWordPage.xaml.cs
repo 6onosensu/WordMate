@@ -2,6 +2,7 @@ using Microsoft.Maui.Controls;
 using System;
 using WordMate.Data;
 using WordMate.Models;
+using WordMate.Views.Components;
 
 namespace WordMate.Views.Pages;
 
@@ -38,7 +39,6 @@ public partial class AddWordPage : ContentPage
         await _wordDB.WordManager.SaveWord(newWord);
         _onWordAdded?.Invoke();
         await DisplayAlert("Success", "Word added successfully!", "OK");
-
         await Navigation.PopAsync();
     }
 }

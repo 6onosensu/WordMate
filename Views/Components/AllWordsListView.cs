@@ -1,7 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-using System.Collections.Generic;
 using WordMate.Models;
-using System.Linq;
 using WordMate.Data;
 using WordMate.Views.Pages;
 
@@ -9,12 +7,13 @@ namespace WordMate.Views.Components;
 public class AllWordsListView : StackLayout
 {
     private Entry _searchEntry;
-    private Label _allWordsLbl;
+    private Label _allWordsLbl, _wordLbl;
     private ListView _wordsListView;
     private List<Word> _allWords;
     private Button _addWordButton;
     private WordDB _wordDB;
     private readonly Action _onWordAdded;
+    //private WordsRefreshViewList _wordsListView;
     public AllWordsListView(WordDB wordDB, Action onWordAdded)
     {
         _wordDB = wordDB;
@@ -51,17 +50,19 @@ public class AllWordsListView : StackLayout
         headerGrid.Add(_allWordsLbl, 0, 0);
         headerGrid.Add(_addWordButton, 1, 0);
 
+        //_wordsListView = new WordsRefreshViewList(_wordDB);
+
         _wordsListView = new ListView
         {
             ItemTemplate = new DataTemplate(() =>
             {
-                var wordLbl = new Label
+                _wordLbl = new Label
                 {
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Start,
                     FontSize = 18
                 };
-                wordLbl.SetBinding(Label.TextProperty, "Text");
+                _wordLbl.SetBinding(Label.TextProperty, "Text");
 
                 var definitionLbl = new Label
                 {
@@ -93,14 +94,14 @@ public class AllWordsListView : StackLayout
                     }
                 };
 
-                grid.Add(wordLbl, 0, 0);
+                grid.Add(_wordLbl, 0, 0);
                 grid.Add(definitionLbl, 0, 0);
                 grid.Add(editBtn, 1, 0);
 
                 var viewCell = new ViewCell { View = grid };
                 viewCell.Tapped += (s, e) =>
                 {
-                    wordLbl.IsVisible = !wordLbl.IsVisible;
+                    _wordLbl.IsVisible = !_wordLbl.IsVisible;
                     definitionLbl.IsVisible = !definitionLbl.IsVisible;
                 };
 
@@ -124,7 +125,6 @@ public class AllWordsListView : StackLayout
             await Navigation.PushAsync(new EditWordPage(_wordDB, selectedWord));
         }
     }
-
     public void SetWordsSource(IEnumerable<Word> words)
     {
         _allWords = words.ToList();
@@ -149,7 +149,6 @@ public class AllWordsListView : StackLayout
         int wordCount = words != null ? words.Count() : 0;
         _allWordsLbl.Text = $"All my words ({wordCount})";
     }
-
     private async void OnAddWordClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new AddWordPage(_wordDB, _onWordAdded));
