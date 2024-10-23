@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using WordMate.Models;
+using WordMate.Core.Models;
 
 namespace WordMate.Data;
 public class WordManagementDB

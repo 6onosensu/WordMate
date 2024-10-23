@@ -1,6 +1,6 @@
 ﻿using SQLite;
 using System.Threading.Tasks;
-using WordMate.Models;
+using WordMate.Core.Models;
 using WordMate.Services;
 
 namespace WordMate.Data

@@ -1,8 +1,8 @@
 using Microsoft.Maui.Controls;
 using WordMate.Data;
-using WordMate.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WordMate.Core.Models;
 
 namespace WordMate.Views;
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-using WordMate.Models;
+using WordMate.Core.Models;
 
 namespace WordMate.Views.Components
 {

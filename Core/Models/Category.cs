@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using System;
 
-namespace WordMate.Models
+namespace WordMate.Core.Models
 {
     public class Category
     {

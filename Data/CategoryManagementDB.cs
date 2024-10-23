@@ -1,7 +1,5 @@
 ﻿using SQLite;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using WordMate.Models;
+using WordMate.Core.Models;
 
 namespace WordMate.Data;
 public class CategoryManagementDB

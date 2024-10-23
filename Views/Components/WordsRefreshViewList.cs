@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WordMate.Data;
 using WordMate.Views.Pages;
-using WordMate.Models;
 using System.Windows.Input;
+using WordMate.Core.Models;
 
 namespace WordMate.Views.Components
 {

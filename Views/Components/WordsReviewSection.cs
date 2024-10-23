@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
 using System.Collections.Generic;
-using WordMate.Models;
 using WordMate.Data;
+using WordMate.Core.Models;
 
 namespace WordMate.Views.Components;
 public class WordsReviewSection : StackLayout

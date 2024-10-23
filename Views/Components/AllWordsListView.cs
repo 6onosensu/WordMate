@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
-using WordMate.Models;
 using WordMate.Data;
 using WordMate.Views.Pages;
+using WordMate.Core.Models;
 
 namespace WordMate.Views.Components;
 public class AllWordsListView : StackLayout

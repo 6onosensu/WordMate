@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
-using WordMate.Models;
 using WordMate.Data;
 using System.Collections.Generic;
+using WordMate.Core.Models;
 
 namespace WordMate.Views.Components;
 public class CategoryGrid : Grid

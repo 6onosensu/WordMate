@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WordMate.Core.Models;
 using WordMate.Data;
-using WordMate.Models;
 
 namespace WordMate.Views.Components
 {

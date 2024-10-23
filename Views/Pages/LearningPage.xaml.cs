@@ -1,7 +1,7 @@
 using WordMate.Data;
 using WordMate.Views.Components;
-using WordMate.Models;
 using WordMate.Services;
+using WordMate.Core.Models;
 
 namespace WordMate.Views;
 public partial class LearningPage : ContentPage

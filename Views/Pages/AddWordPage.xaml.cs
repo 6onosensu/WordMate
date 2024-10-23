@@ -1,7 +1,7 @@
 using Microsoft.Maui.Controls;
 using System;
+using WordMate.Core.Models;
 using WordMate.Data;
-using WordMate.Models;
 using WordMate.Views.Components;
 
 namespace WordMate.Views.Pages;

@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using System;
 
-namespace WordMate.Models
+namespace WordMate.Core.Models
 {
     public class Word
     {
@@ -24,7 +24,7 @@ namespace WordMate.Models
             SuccessCount = 0;
             LastReviewDate = DateTime.MinValue;
         }
-        public Word(string text, string translation, string definition, 
+        public Word(string text, string translation, string definition,
             int categoryId = 1, bool isFavorite = false, int successCount = 0)
         {
             Id = Guid.NewGuid();
@@ -36,7 +36,7 @@ namespace WordMate.Models
             SuccessCount = successCount;
             LastReviewDate = DateTime.Now;
         }
-        public Word(Guid id, string text, string translation, string definition, 
+        public Word(Guid id, string text, string translation, string definition,
             int categoryId, bool isFavorite, int successCount, DateTime lastReviewDate)
         {
             Id = id;
