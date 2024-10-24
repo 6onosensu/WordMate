@@ -1,26 +1,28 @@
-using Microsoft.Maui.Controls;
-using WordMate.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using WordMate.Core.Models;
+using WordMate.Core.Services;
 
 namespace WordMate.Views;
-
 public partial class WordListPage : ContentPage
 {
-    private WordDB _wordDB;
-    private int _categoryId;
-    public WordListPage(WordDB wordDB, int categoryId)
-	{
-        InitializeComponent();
-        _wordDB = wordDB;
-        _categoryId = categoryId;
+    private readonly WordService _wordService;
+    private readonly int _categoryId;
 
-        LoadWords();
+    public WordListPage(WordService wordService, int categoryId)
+    {
+        InitializeComponent();
+        _wordService = wordService;
+        _categoryId = categoryId;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadWords();
+    }
+
     private async Task LoadWords()
     {
-        List<Word> words = await _wordDB.WordManager.GetWordsByCategory(_categoryId);
+        List<Word> words = await _wordService.GetWordsByCategoryAsync(_categoryId);
         WordsListView.ItemsSource = words;
     }
 
@@ -31,15 +33,10 @@ public partial class WordListPage : ContentPage
         var translationLabel = (Label)stackLayout.FindByName("TranslationLabel");
         var definitionLabel = (Label)stackLayout.FindByName("DefinitionLabel");
 
-        if (translationLabel.IsVisible)
+        if (translationLabel != null && definitionLabel != null)
         {
-            translationLabel.IsVisible = false;
-            definitionLabel.IsVisible = true;
-        }
-        else
-        {
-            translationLabel.IsVisible = true;
-            definitionLabel.IsVisible = false;
+            translationLabel.IsVisible = !translationLabel.IsVisible;
+            definitionLabel.IsVisible = !definitionLabel.IsVisible;
         }
     }
 }

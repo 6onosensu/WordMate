@@ -1,31 +1,41 @@
-using Microsoft.Maui.Controls;
-using System;
 using WordMate.Core.Models;
-using WordMate.Data;
-using WordMate.Views.Components;
+using WordMate.Core.Services;
 
 namespace WordMate.Views.Pages;
 
 public partial class AddWordPage : ContentPage
 {
-    private readonly WordDB _wordDB;
-    private readonly Action _onWordAdded;
+    private readonly WordService _wordService;
+    private readonly RefreshManager _refreshManager;
 
-    public AddWordPage(WordDB wordDB, Action onWordAdded)
+    public AddWordPage(WordService wordService, RefreshManager refreshManager)
     {
         InitializeComponent();
-        _wordDB = wordDB;
-        _onWordAdded = onWordAdded;
+        _wordService = wordService;
+        _refreshManager = refreshManager;
     }
+
     private async void OnSaveWordClicked(object sender, EventArgs e)
     {
         string wordText = WordEntry.Text;
         string translationText = TranslationEntry.Text;
         string definitionText = DefinitionEntry.Text;
 
-        if (string.IsNullOrWhiteSpace(wordText) || string.IsNullOrWhiteSpace(translationText))
+        var checkWordText = string.IsNullOrWhiteSpace(wordText);
+        var checkTranslationText = string.IsNullOrWhiteSpace(translationText);
+        var checkDefinitionText = string.IsNullOrWhiteSpace(definitionText);
+
+        if (checkWordText || checkTranslationText || checkDefinitionText)
         {
-            await DisplayAlert("Error", "Please enter both the word and the translation.", "OK");
+            string missingFields = "";
+
+            if (checkWordText) missingFields += "Word";
+            if (checkTranslationText)
+                missingFields += (missingFields.Length > 0 ? ", " : "") + "Translation";
+            if (checkDefinitionText)
+                missingFields += (missingFields.Length > 0 ? ", " : "") + "Definition";
+
+            await DisplayAlert("Error", $"Please enter the following fields: {missingFields}.", "OK");
             return;
         }
 
@@ -36,8 +46,10 @@ public partial class AddWordPage : ContentPage
             Definition = definitionText,
         };
 
-        await _wordDB.WordManager.SaveWord(newWord);
-        _onWordAdded?.Invoke();
+        await _wordService.SaveWordAsync(newWord);
+
+        await _refreshManager.RefreshAfterUpdating(newWord.CategoryId);
+
         await DisplayAlert("Success", "Word added successfully!", "OK");
         await Navigation.PopAsync();
     }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WordMate.Core.Models;
-using WordMate.Data;
+﻿using WordMate.Core.Models;
+using WordMate.Core.Services;
+
 
 namespace WordMate.Views.Components
 {
@@ -14,12 +10,12 @@ namespace WordMate.Views.Components
         private Entry _inputEntry;
         private Button _nextBtn;
         private Word _currentWord;
-        private WordDB _wordDB;
+        private WordService _wordService;
         private int _currentStage = 0;
 
-        public WordStudyView(Word currentWord, WordDB wordDB)
+        public WordStudyView(Word currentWord, WordService wordService)
         {
-            _wordDB = wordDB;
+            _wordService = wordService; 
             _currentWord = currentWord;
 
             var headerView = new HeaderView();

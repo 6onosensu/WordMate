@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace WordMate.Views.Components;
+﻿namespace WordMate.Views.Components;
 public class HeaderView : StackLayout
 {
     public HeaderView()
@@ -23,6 +21,6 @@ public class HeaderView : StackLayout
 
     private async void TapGRTapped(object? sender, TappedEventArgs e)
     {
-        await Navigation.PopToRootAsync();
+        await Navigation.PopAsync();
     }
 }

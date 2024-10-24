@@ -1,25 +1,35 @@
 ﻿using Microsoft.Maui.Controls;
-using System.IO;
-using WordMate.Data;
+using WordMate.Core.Services;
 using WordMate.Views.Components;
+using WordMate.Data;
 
 namespace WordMate.Views;
 public partial class MainPage : ContentPage
 {
-    private WordDB _wordDB;
+    private WordService _wordService;
+    private CategoryService _categoryService;
+    private RefreshManager _refreshManager;
     private CategoryGrid _categoryGrid;
     private AllWordsListView _allWordsListView;
     private WordsReviewSection _wordsReviewSection;
+
     public MainPage()
     {
-        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WordMate.db3");
-        _wordDB = new WordDB(dbPath);
-
-        SetupPage();
+        InitializePage();
     }
-    public MainPage(WordDB wordDB)
+    private async Task InitializePage()
     {
-        _wordDB = wordDB;
+        var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WordMate.db3");
+        var database = new WordMateDatabase(dbPath);
+
+        await database.InitializeDatabase();
+
+        var (wordRepository, categoryRepository) = database.CreateRepositories();
+
+        _wordService = new WordService(wordRepository, categoryRepository, null);
+        _categoryService = new CategoryService(categoryRepository);
+
+        _refreshManager = new RefreshManager(_allWordsListView, _categoryGrid, _wordsReviewSection, _wordService, _categoryService);
 
         SetupPage();
     }
@@ -27,27 +37,23 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await InitializeDB();
-        await LoadWordsForReview();
-        await LoadAllWords();
+        if (_wordService != null && _categoryService != null)
+        {
+            await InitializeDB();
+            await _refreshManager.RefreshPageComponents();
+        }
+        else
+        {
+            await DisplayAlert("Error", "Services are not initialized", "OK");
+        }
+        //await InitializeDB();
+        //await _refreshManager.RefreshPageComponents();
     }
 
     private async Task InitializeDB()
     {
-        await _wordDB.InitializeDatabase(); 
-    }
-
-    private async Task LoadWordsForReview()
-    {
-        var reviewWords = await _wordDB.WordManager.GetWordsByCategory(2);
-        _wordsReviewSection.SetWords(reviewWords);
-    }
-
-    private async Task LoadAllWords()
-    {
-        var allWords = await _wordDB.WordManager.GetWords();
-
-        _allWordsListView = new AllWordsListView(_wordDB, OnWordAdded);
+        await _categoryService.InitializeCategories();
+        var allWords = await _wordService.GetAllWordsAsync();
         _allWordsListView.SetWordsSource(allWords);
     }
 
@@ -55,9 +61,11 @@ public partial class MainPage : ContentPage
     {
         var headerView = new HeaderView();
 
-        _categoryGrid = new CategoryGrid(_wordDB);
+        _categoryGrid = new CategoryGrid(_categoryService, _wordService);
         _wordsReviewSection = new WordsReviewSection();
-        _allWordsListView = new AllWordsListView(_wordDB, OnWordAdded);
+        _allWordsListView = new AllWordsListView(_wordService, _refreshManager);
+
+
         var mainContent = new StackLayout
         {
             Children =
@@ -72,7 +80,7 @@ public partial class MainPage : ContentPage
             Content = mainContent
         };
 
-        var footerView = new FooterView(_wordDB);
+        var footerView = new FooterView(_wordService);
 
         var grid = new Grid
         {
@@ -88,12 +96,5 @@ public partial class MainPage : ContentPage
         grid.Add(footerView, 0, 2);
 
         Content = grid;
-    }
-    private async void OnWordAdded()
-    {
-        _categoryGrid.Refresh();
-
-        var allWords = await _wordDB.WordManager.GetWords();
-        _allWordsListView.SetWordsSource(allWords);
     }
 }

@@ -4,15 +4,15 @@ namespace WordMate
 {
     public partial class App : Application
     {
-        static WordDB database;
-        public static WordDB Database
+        static WordMateDatabase database;
+        public static WordMateDatabase Database
         {
             get
             {
                 if (database == null)
                 {
                     string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WordMate.db3");
-                    database = new WordDB(dbPath);
+                    database = new WordMateDatabase(dbPath);
                 }
                 return database;
             }

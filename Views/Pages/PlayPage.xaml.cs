@@ -1,14 +1,13 @@
-using WordMate.Data;
+using Microsoft.Maui.Controls;
+using WordMate.Core.Services;
 
 namespace WordMate.Views;
 
 public partial class PlayPage : ContentPage
 {
-	private WordDB _wordDB;
 
-	public PlayPage(WordDB wordDB)
-	{
-		_wordDB = wordDB;
-		InitializeComponent();
-	}
+    public PlayPage()
+    {
+        InitializeComponent();
+    }
 }
