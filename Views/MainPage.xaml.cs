@@ -2,6 +2,8 @@
 using WordMate.Core.Services;
 using WordMate.Views.Components;
 using WordMate.Data;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace WordMate.Views;
 public partial class MainPage : ContentPage
@@ -15,44 +17,42 @@ public partial class MainPage : ContentPage
 
     public MainPage()
     {
-        InitializePage();
+        InitializePageAsync();
     }
-    private async Task InitializePage()
+    private async Task InitializePageAsync()
     {
         var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WordMate.db3");
         var database = new WordMateDatabase(dbPath);
 
-        await database.InitializeDatabase();
+        database.InitializeDatabaseAsync();
 
         var (wordRepository, categoryRepository) = database.CreateRepositories();
 
-        _wordService = new WordService(wordRepository, categoryRepository, null);
+        _wordService = new WordService(wordRepository, categoryRepository);
         _categoryService = new CategoryService(categoryRepository);
 
+        _categoryGrid = new CategoryGrid(_categoryService, _wordService);
+        _allWordsListView = new AllWordsListView(_wordService, _refreshManager);
+        _wordsReviewSection = new WordsReviewSection();
+
         _refreshManager = new RefreshManager(_allWordsListView, _categoryGrid, _wordsReviewSection, _wordService, _categoryService);
+        _wordService.SetRefreshManager(_refreshManager);
 
         SetupPage();
+    
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (_wordService != null && _categoryService != null)
-        {
-            await InitializeDB();
-            await _refreshManager.RefreshPageComponents();
-        }
-        else
-        {
-            await DisplayAlert("Error", "Services are not initialized", "OK");
-        }
-        //await InitializeDB();
-        //await _refreshManager.RefreshPageComponents();
+        await InitializeDB();
+        await _refreshManager.RefreshPageComponents();
     }
 
     private async Task InitializeDB()
     {
         await _categoryService.InitializeCategories();
+        await _wordService.AddSampleWords();
         var allWords = await _wordService.GetAllWordsAsync();
         _allWordsListView.SetWordsSource(allWords);
     }

@@ -1,4 +1,5 @@
-﻿using WordMate.Core.Interfaces;
+﻿using SQLitePCL;
+using WordMate.Core.Interfaces;
 using WordMate.Core.Models;
 
 namespace WordMate.Core.Services;
@@ -6,24 +7,15 @@ public class WordService
 {
     private readonly IWordRepository _wordRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly IRefreshManager _refreshManager;
+    private IRefreshManager _refreshManager;
 
-    public WordService( IWordRepository wordRepository, ICategoryRepository categoryRepository, IRefreshManager refreshManager )
+    public WordService(IWordRepository wordRepository, ICategoryRepository categoryRepository)
     {
         _wordRepository = wordRepository;
         _categoryRepository = categoryRepository;
-        _refreshManager = refreshManager;
     }
 
-    public async Task SaveWordAsync(Word word)
-    {
-        await _wordRepository.SaveWord(word);
-    }
-
-    private async Task UpdateCategoryWordCountAsync(int categoryId)
-    {
-        await _categoryRepository.UpdateWordCountForCategory(categoryId);
-    }
+    public async Task SaveWordAsync(Word word) => await _wordRepository.SaveWord(word);
 
     public async Task<List<Word>> GetAllWordsAsync() => await _wordRepository.GetWords();
 
@@ -55,7 +47,7 @@ public class WordService
     private async Task ChangeWordCategory(Word word, int newCategoryId)
     {
         var oldCategoryId = word.CategoryId;
-        await _wordRepository.ChangeWordCategory(word.Id, newCategoryId);
+        await _wordRepository.ChangeWordCategoryAsync(word.Id, newCategoryId);
         word.SuccessCount = 0;
     }
 
@@ -65,22 +57,18 @@ public class WordService
         {
             await _categoryRepository.UpdateWordCountForCategory(i);
         }
+        await _refreshManager.RefreshPageComponents();
     }
 
     public async Task<bool> DeleteWordAsync(Guid wordId)
     {
         var word = await _wordRepository.GetWordById(wordId);
         if (word == null) return false;
-
         await _wordRepository.DeleteWord(word);
-        await UpdateCategoryAndRefreshUI(word.CategoryId);
+
+        await UpdateCategoryWordCounts();
 
         return true;
-    }
-    private async Task UpdateCategoryAndRefreshUI(int categoryId)
-    {
-        await _categoryRepository.UpdateWordCountForCategory(categoryId);
-        await _refreshManager.RefreshPageComponents();
     }
 
     private async Task AddWordsAsync(List<Word> words)
@@ -89,6 +77,7 @@ public class WordService
         {
             await SaveWordAsync(word);
         }
+        await UpdateCategoryWordCounts();
     }
 
     public async Task AddSampleWords()
@@ -119,5 +108,10 @@ public class WordService
                 new Word("final", "финал", "The end or last part of something.", categoryId: 3)
             });
         }
+    }
+
+    public void SetRefreshManager(RefreshManager refreshManager)
+    {
+        _refreshManager = refreshManager;
     }
 }

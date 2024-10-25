@@ -167,7 +167,7 @@ public class AllWordsListView : StackLayout
         {
             wordCount = 0;
         }
-        _allWordsLbl.Text = $"All my words ({wordCount})";
+        _allWordsLbl.Text = $"My words ({wordCount})";
     }
 
     private async void OnAddWordClicked(object sender, EventArgs e)

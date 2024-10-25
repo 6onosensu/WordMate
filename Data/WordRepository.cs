@@ -64,7 +64,7 @@ namespace WordMate.Data
             return _connection.Table<Word>().Where(w => w.CategoryId == categoryId).CountAsync();
         }
 
-        public async Task ChangeWordCategory(Guid wordId, int newCategoryId)
+        public async Task ChangeWordCategoryAsync(Guid wordId, int newCategoryId)
         {
             var word = await GetWordById(wordId);
 

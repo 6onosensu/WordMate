@@ -25,18 +25,17 @@ namespace WordMate.Core.Services
             _categoryService = categoryService;
         }
 
+        public async Task RefreshAfterUpdating(int categoryId)
+        {
+            await _categoryService.UpdateCountForCategory(categoryId);
+            await RefreshPageComponents();
+        }
+
         public async Task RefreshPageComponents()
         {
             await RefreshAllWordsListView();
             await RefreshCategoryGrid();
             await RefreshWordsReviewSection();
-        }
-
-        public async Task RefreshAfterUpdating(int categoryId)
-        {
-            await _categoryService.UpdateCountForCategory(categoryId);
-
-            await RefreshPageComponents();
         }
 
         private async Task RefreshAllWordsListView()
@@ -46,10 +45,12 @@ namespace WordMate.Core.Services
                 await _allWordsListView.LoadWordsAsync();
             }
         }
+
         private async Task RefreshCategoryGrid()
         {
             _categoryGrid?.Refresh();
         }
+
         public async Task RefreshWordsReviewSection()
         {
             if (_wordsReviewSection != null)

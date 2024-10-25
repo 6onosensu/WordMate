@@ -94,6 +94,8 @@ public class CategoryGrid : Grid
 
     private void UpdateCategoryLabel(Category category)
     {
+        _categoryService.UpdateCountForCategory(category.Id);
+
         if (_categoryLabels.ContainsKey(category.Id))
         {
             var categoryLabel = _categoryLabels[category.Id];

@@ -11,7 +11,7 @@ namespace WordMate.Core.Interfaces
         Task<int> SaveWord(Word word);
         Task<int> DeleteWord(Word word);
         Task DeleteWord(Guid id);
-        Task ChangeWordCategory(Guid wordId, int newCategoryId);
+        Task ChangeWordCategoryAsync(Guid wordId, int newCategoryId);
         Task<int> CountWordsInCategory(int categoryId);
         Task<int> GetWordCount();
     }

@@ -79,8 +79,6 @@ namespace WordMate.Views.Pages
             if (confirm)
             {
                 await _wordService.DeleteWordAsync(_word.Id);
-                await _refreshManager.RefreshAfterUpdating(_word.CategoryId);
-
                 await DisplayAlert("Success", "Word deleted successfully!", "OK");
                 await Navigation.PopAsync();
             }
