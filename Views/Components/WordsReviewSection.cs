@@ -10,8 +10,9 @@ public class WordsReviewSection : StackLayout
 {
     private WordCarouselView _wordsCarousel;
     private WordService _wordService;
-    public WordsReviewSection()
+    public WordsReviewSection(WordService wordService)
     {
+        _wordService = wordService;
         InitializeUI();
     }
 
@@ -19,11 +20,11 @@ public class WordsReviewSection : StackLayout
     {
         var wordsOnReview = CreateLabel("Words on Review");
         _wordsCarousel = CreateWordCarousel();
-        var recallBtn = CreateButton("Recall", OnRecallBtnClicked);
+        var recallButton = CreateButton();
 
         Children.Add(wordsOnReview);
         Children.Add(_wordsCarousel);
-        Children.Add(recallBtn);
+        Children.Add(recallButton);
 
         Spacing = 10;
         Margin = 10;
@@ -48,11 +49,11 @@ public class WordsReviewSection : StackLayout
         };
     }
 
-    private Button CreateButton(string text, EventHandler onClick)
+    private Button  CreateButton()
     {
-        return new Button
+        var recallBtn = new Button
         {
-            Text = text,
+            Text = "Recall",
             FontSize = 20,
             HeightRequest = 60,
             WidthRequest = 300,
@@ -61,6 +62,9 @@ public class WordsReviewSection : StackLayout
             TextColor = Colors.White,
             HorizontalOptions = LayoutOptions.Center
         };
+        recallBtn.Clicked += OnRecallBtnClicked;
+
+        return recallBtn;
     }
 
     private async void OnRecallBtnClicked(object? sender, EventArgs e)

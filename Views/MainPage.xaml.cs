@@ -33,7 +33,7 @@ public partial class MainPage : ContentPage
 
         _categoryGrid = new CategoryGrid(_categoryService, _wordService);
         _allWordsListView = new AllWordsListView(_wordService, _refreshManager);
-        _wordsReviewSection = new WordsReviewSection();
+        _wordsReviewSection = new WordsReviewSection(_wordService);
 
         _refreshManager = new RefreshManager(_allWordsListView, _categoryGrid, _wordsReviewSection, _wordService, _categoryService);
         _wordService.SetRefreshManager(_refreshManager);
@@ -62,7 +62,7 @@ public partial class MainPage : ContentPage
         var headerView = new HeaderView();
 
         _categoryGrid = new CategoryGrid(_categoryService, _wordService);
-        _wordsReviewSection = new WordsReviewSection();
+        _wordsReviewSection = new WordsReviewSection(_wordService);
         _allWordsListView = new AllWordsListView(_wordService, _refreshManager);
 
 
