@@ -47,8 +47,7 @@ public partial class AddWordPage : ContentPage
         };
 
         await _wordService.SaveWordAsync(newWord);
-
-        await _refreshManager.RefreshAfterUpdating(newWord.CategoryId);
+        await _refreshManager.RefreshAfterUpdating(1);
 
         await DisplayAlert("Success", "Word added successfully!", "OK");
         await Navigation.PopAsync();
