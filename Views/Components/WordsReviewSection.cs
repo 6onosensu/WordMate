@@ -2,11 +2,14 @@
 using Microsoft.Maui.Controls;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WordMate.Views.Pages;
+using WordMate.Core.Services;
 
 namespace WordMate.Views.Components;
 public class WordsReviewSection : StackLayout
 {
     private WordCarouselView _wordsCarousel;
+    private WordService _wordService;
     public WordsReviewSection()
     {
         InitializeUI();
@@ -62,7 +65,7 @@ public class WordsReviewSection : StackLayout
 
     private async void OnRecallBtnClicked(object? sender, EventArgs e)
     {
-        await Navigation.PushAsync(new ReviewPage());
+        await Navigation.PushAsync(new CategoryWordsPage(2, _wordService));
     }
 
     public void SetWords(IEnumerable<Word> words)

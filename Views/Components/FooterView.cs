@@ -67,6 +67,6 @@ public class FooterView : StackLayout
 
     private async void OnLearnBtnClicked(object? sender, EventArgs e)
     {
-        await Navigation.PushAsync(new LearningPage());
+        await Navigation.PushAsync(new CategoryWordsPage(1, _wordService));
     }
 }
