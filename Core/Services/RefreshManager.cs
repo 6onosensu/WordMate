@@ -33,32 +33,14 @@ namespace WordMate.Core.Services
 
         public async Task RefreshPageComponents()
         {
-            await RefreshAllWordsListView();
-            await RefreshCategoryGrid();
-            await RefreshWordsReviewSection();
-        }
-
-        private async Task RefreshAllWordsListView()
-        {
             if (_allWordsListView != null)
             {
                 await _allWordsListView.LoadWordsAsync();
             }
-        }
 
-        private async Task RefreshCategoryGrid()
-        {
-            _categoryGrid?.Refresh();
-        }
+            _categoryGrid.Refresh();
 
-        public async Task RefreshWordsReviewSection()
-        {
-            if (_wordsReviewSection != null)
-            {
-                var reviewWords = await _wordService.GetWordsByCategoryAsync(2);
-
-                _wordsReviewSection.SetWords(reviewWords);
-            }
+            _wordsReviewSection.RefreshCarousel();
         }
     }
 }
