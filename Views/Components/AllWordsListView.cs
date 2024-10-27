@@ -11,12 +11,10 @@ public class AllWordsListView : StackLayout
     private List<Word> _allWords;
     private Button _addWordButton;
     private readonly WordService _wordService;
-    private readonly RefreshManager _refreshManager;
 
-    public AllWordsListView(WordService wordService, RefreshManager refreshManager)
+    public AllWordsListView(WordService wordService)
     {
         _wordService = wordService;
-        _refreshManager = refreshManager;
 
         InitializeComponents();
         LoadWordsAsync();
@@ -128,7 +126,7 @@ public class AllWordsListView : StackLayout
     {
         var editButton = (Button)sender;
         var selectedWord = (Word)editButton.BindingContext;
-        await Navigation.PushAsync(new EditWordPage(_wordService, selectedWord, _refreshManager));
+        await Navigation.PushAsync(new EditWordPage(_wordService, selectedWord));
     }
 
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
@@ -172,7 +170,7 @@ public class AllWordsListView : StackLayout
 
     private async void OnAddWordClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AddWordPage(_wordService, _refreshManager));
+        await Navigation.PushAsync(new AddWordPage(_wordService));
     }
 
     public async Task LoadWordsAsync()

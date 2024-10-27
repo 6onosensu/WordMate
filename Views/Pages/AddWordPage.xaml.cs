@@ -6,13 +6,12 @@ namespace WordMate.Views.Pages;
 public partial class AddWordPage : ContentPage
 {
     private readonly WordService _wordService;
-    private readonly RefreshManager _refreshManager;
+    private readonly RefreshManager? _refreshManager;
 
-    public AddWordPage(WordService wordService, RefreshManager refreshManager)
+    public AddWordPage(WordService wordService)
     {
         InitializeComponent();
         _wordService = wordService;
-        _refreshManager = refreshManager;
     }
 
     private async void OnSaveWordClicked(object sender, EventArgs e)
@@ -47,7 +46,6 @@ public partial class AddWordPage : ContentPage
         };
 
         await _wordService.SaveWordAsync(newWord);
-        await _refreshManager.RefreshAfterUpdating(1);
 
         await DisplayAlert("Success", "Word added successfully!", "OK");
         await Navigation.PopAsync();

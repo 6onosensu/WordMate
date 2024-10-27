@@ -37,8 +37,13 @@ public class CategoryWordsPage : ContentPage
         var learnButton = new Button
         {
             Text = "Let's Do It!",
-            HorizontalOptions = LayoutOptions.FillAndExpand,
-            VerticalOptions = LayoutOptions.End
+            VerticalOptions = LayoutOptions.End,
+            FontSize = 20,
+            HeightRequest = 60,
+            WidthRequest = 300,
+            FontAttributes = FontAttributes.Bold,
+            BackgroundColor = Color.FromHex("ffde59"),
+            TextColor = Colors.White,
         };
         learnButton.Clicked += OnButtonClicked;
 

@@ -32,10 +32,10 @@ public partial class MainPage : ContentPage
         _categoryService = new CategoryService(categoryRepository);
 
         _categoryGrid = new CategoryGrid(_categoryService, _wordService);
-        _allWordsListView = new AllWordsListView(_wordService, _refreshManager);
+        _allWordsListView = new AllWordsListView(_wordService);
         _wordsReviewSection = new WordsReviewSection(_wordService);
 
-        _refreshManager = new RefreshManager(_allWordsListView, _categoryGrid, _wordsReviewSection, _wordService, _categoryService);
+        _refreshManager = new RefreshManager(_allWordsListView, _categoryGrid, _wordsReviewSection);
         _wordService.SetRefreshManager(_refreshManager);
 
         SetupPage();
@@ -46,7 +46,6 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         await InitializeDB();
-        await _refreshManager.RefreshPageComponents();
     }
 
     private async Task InitializeDB()
@@ -63,7 +62,7 @@ public partial class MainPage : ContentPage
 
         _categoryGrid = new CategoryGrid(_categoryService, _wordService);
         _wordsReviewSection = new WordsReviewSection(_wordService);
-        _allWordsListView = new AllWordsListView(_wordService, _refreshManager);
+        _allWordsListView = new AllWordsListView(_wordService);
 
 
         var mainContent = new StackLayout

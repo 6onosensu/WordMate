@@ -3,6 +3,5 @@
     public interface IRefreshManager
     {
         Task RefreshPageComponents();
-        Task RefreshAfterUpdating(int categoryId);
     }
 }

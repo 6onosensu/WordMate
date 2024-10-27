@@ -1,75 +1,102 @@
 ﻿using WordMate.Core.Models;
 using WordMate.Core.Services;
+using Microsoft.Maui.Controls;
+using System.Collections.ObjectModel;
+//using Microsoft.Maui.Controls.Compatibility;
+using Grid = Microsoft.Maui.Controls.Grid;
 
 namespace WordMate.Views.Components;
-public class CategoryGrid : Grid
+public class CategoryGrid : ContentView
 {
     private readonly CategoryService _categoryService;
     private readonly WordService _wordService;
-    private readonly Dictionary<int, Label> _categoryLabels = new Dictionary<int, Label>();
+    private Frame _categoryFrame;
+    private Grid _grid;
+    //private readonly Dictionary<int, Label> _categoryLabels = new Dictionary<int, Label>();
+    private readonly ObservableCollection<Category> _categories = new ObservableCollection<Category>();
 
     public CategoryGrid(CategoryService categoryService, WordService wordService)
     {
         _categoryService = categoryService;
         _wordService = wordService;
 
-        ColumnDefinitions = new ColumnDefinitionCollection
+
+        var listView = new ListView
         {
-            new ColumnDefinition(),
-            new ColumnDefinition(),
-            new ColumnDefinition()
+            ItemsSource = _categories,
+            //ItemsSource = new ObservableCollection<Category>(),
+            ItemTemplate = new DataTemplate(() =>
+            {
+                _grid = new Grid
+                {
+                    ColumnDefinitions = new ColumnDefinitionCollection
+                    {
+                        new ColumnDefinition(),
+                        new ColumnDefinition(),
+                        new ColumnDefinition()
+                    },
+                };
+
+                /*var number1Label = new Label();
+                number1Label.SetBinding(Label.TextProperty, "Name");
+                _grid.Add(number1Label, 0, 0);*/
+
+                return new ViewCell { View = _grid };
+            })
         };
+
+        Content = listView;
+
 
         LoadCategories();
     }
 
-    public async void Refresh()
+    public void Refresh()
     {
-        await LoadCategories();
+        UpdateCategoryLabels();
     }
 
     private async Task LoadCategories()
     {
-        List<Category> categories = await _categoryService.GetAllCategoriesAsync();
+        //List<Category> categories = await _categoryService.GetAllCategoriesAsync();
+        var categories = await _categoryService.GetAllCategoriesAsync();
 
-        for (int i = 0; i < categories.Count; i++)
+        foreach (var category in categories)
         {
-            if (_categoryLabels.ContainsKey(categories[i].Id))
-            {
-                UpdateCategoryLabel(categories[i]);
-            }
-            else
+            _categories.Add(category);
+            /*if (!_categoryLabels.ContainsKey(categories[i].Id))
             {
                 AddCategoryToGrid(categories[i], i);
-            }
+            }*/
         }
     }
 
     private void AddCategoryToGrid(Category category, int columnIndex)
     {
-        var categoryLbl = CreateCategoryLabel(category);
-        var categoryFrame = CreateCategoryFrame(categoryLbl, category);
+        var categoryLbl = CreateCategoryLabel();
+        CreateCategoryFrame(categoryLbl, category);
 
         _categoryLabels[category.Id] = categoryLbl;
 
-        Children.Add(categoryFrame);
-        Grid.SetColumn(categoryFrame, columnIndex);
+        _grid.Children.Add(_categoryFrame);
+        Grid.SetColumn(_categoryFrame, columnIndex);
     }
 
-    private Label CreateCategoryLabel(Category category)
+    private Label CreateCategoryLabel()
     {
-        return new Label
+        var label = new Label
         {
-            Text = $"{category.Name} ({category.WordsCount})",
             FontSize = 14,
             HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.Center
+            VerticalOptions = LayoutOptions.Center,
         };
+        label.SetBinding(Label.TextProperty, "Name" + "WordsCount");
+        return label;
     }
 
-    private Frame CreateCategoryFrame(Label categoryLbl, Category category)
+    private void CreateCategoryFrame(Label categoryLbl, Category category)
     {
-        var categoryFrame = new Frame
+        _categoryFrame = new Frame
         {
             BorderColor = Color.FromHex("ffbd59"),
             CornerRadius = 0,
@@ -83,8 +110,7 @@ public class CategoryGrid : Grid
         var tapGR = new TapGestureRecognizer();
         tapGR.Tapped += async (s, e) => await OnCategoryTapped(category.Id);
 
-        categoryFrame.GestureRecognizers.Add(tapGR);
-        return categoryFrame;
+        _categoryFrame.GestureRecognizers.Add(tapGR);
     }
 
     private async Task OnCategoryTapped(int categoryId)
@@ -92,14 +118,24 @@ public class CategoryGrid : Grid
         await Navigation.PushAsync(new WordListPage(_wordService, categoryId));
     }
 
-    private void UpdateCategoryLabel(Category category)
+    private async void UpdateCategoryLabels()
     {
-        _categoryService.UpdateCountForCategory(category.Id);
+        await _categoryService.UpdateCountForCategories();
+        List<Category> categories = await _categoryService.GetAllCategoriesAsync();
 
-        if (_categoryLabels.ContainsKey(category.Id))
+        for (int i = 0; i <= 2; i++)
         {
-            var categoryLabel = _categoryLabels[category.Id];
-            categoryLabel.Text = $"{category.Name} ({category.WordsCount})";
+            var categoryLbl = CreateCategoryLabel();
+            _categoryFrame.Content = new StackLayout
+            {
+                Children = { categoryLbl }
+            };
+
+            _categoryLabels[categories[i].Id] = categoryLbl;
+
+            _grid.Children.RemoveAt(i);
+            _grid.Children.Add(_categoryFrame);
+            Grid.SetColumn(_categoryFrame, i);
         }
     }
 }

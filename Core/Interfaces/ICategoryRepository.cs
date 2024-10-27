@@ -6,6 +6,6 @@ namespace WordMate.Core.Interfaces
     {
         Task<List<Category>> GetCategories();
         Task InitializeCategories();
-        Task UpdateWordCountForCategory(int categoryId);
+        Task UpdateWordCountForCategories();
     }
 }

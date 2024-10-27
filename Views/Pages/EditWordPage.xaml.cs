@@ -9,11 +9,10 @@ namespace WordMate.Views.Pages
         private readonly RefreshManager _refreshManager;
         private Word _word;
 
-        public EditWordPage(WordService wordService, Word word, RefreshManager refreshManager)
+        public EditWordPage(WordService wordService, Word word)
         {
             _wordService = wordService;
             _word = word;
-            _refreshManager = refreshManager;
 
             InitializeComponent();
             UpdateWordDisplay();
@@ -53,7 +52,6 @@ namespace WordMate.Views.Pages
             UpdateWordDisplay();
             ToggleEditMode(false);
 
-            await _refreshManager.RefreshAfterUpdating(_word.CategoryId);
             await DisplayAlert("Success", "Word updated successfully!", "OK");
         }
 

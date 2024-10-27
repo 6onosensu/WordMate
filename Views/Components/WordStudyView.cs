@@ -10,7 +10,7 @@ namespace WordMate.Views.Components
     {
         private Label _wordLbl, _promptLbl, _feedbackLbl;
         private Entry _inputEntry;
-        private Button _checkBtn;
+        private Button _checkBtn, _nextBtn;
         private Word _currentWord;
         private WordService _wordService;
         private int _currentIndex = 0;
@@ -87,7 +87,7 @@ namespace WordMate.Views.Components
 
             Children.Add(cardFrame);
 
-            var nextBtn = new Button
+            _nextBtn = new Button
             {
                 Text = "Next Word",
                 FontSize = 20,
@@ -100,10 +100,10 @@ namespace WordMate.Views.Components
                 HorizontalOptions = LayoutOptions.Center,
 
             };
-            nextBtn.Clicked += OnNextBtnKlicked;
+            _nextBtn.Clicked += OnNextBtnKlicked;
 
             Children.Add(_feedbackLbl);
-            Children.Add(nextBtn);
+            Children.Add(_nextBtn);
 
             LoadWords();
         }
@@ -127,6 +127,7 @@ namespace WordMate.Views.Components
                 _feedbackLbl.Text = "You've completed all words!";
                 _inputEntry.IsEnabled = false;
                 _checkBtn.IsEnabled = false;
+                _nextBtn.IsEnabled = false;
             }
         }
 
@@ -199,7 +200,6 @@ namespace WordMate.Views.Components
             {
                 _feedbackLbl.Text = "Correct!";
                 _feedbackLbl.TextColor = Colors.Green;
-
                 //await _wordService.UpdateWordProgress(_currentWord.Id, isCorrect);
             }
             else

@@ -15,7 +15,16 @@ public class WordService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task SaveWordAsync(Word word) => await _wordRepository.SaveWord(word);
+    private void UpdateAll()
+    {
+        _refreshManager.RefreshPageComponents();
+    }
+
+    public async Task SaveWordAsync(Word word) 
+    { 
+        await _wordRepository.SaveWord(word);
+        UpdateAll();
+    }
 
     public async Task<List<Word>> GetAllWordsAsync() => await _wordRepository.GetWords();
 
@@ -30,7 +39,7 @@ public class WordService
         {
             word.SuccessCount++;
 
-            if (word.CategoryId == 1 && word.SuccessCount >= 3)
+            if (word.CategoryId == 1 && word.SuccessCount <= 3)
             {
                 await ChangeWordCategory(word, 2);
             }
@@ -39,8 +48,9 @@ public class WordService
                 await ChangeWordCategory(word, 3);
             }
         }
+
         await _wordRepository.SaveWord(word);
-        await UpdateCategoryWordCounts();
+        UpdateAll();
         return true;
     }
 
@@ -51,22 +61,14 @@ public class WordService
         word.SuccessCount = 0;
     }
 
-    private async Task UpdateCategoryWordCounts()
-    {
-        for (int i = 1; i <= 3; i++)
-        {
-            await _categoryRepository.UpdateWordCountForCategory(i);
-        }
-        await _refreshManager.RefreshPageComponents();
-    }
-
     public async Task<bool> DeleteWordAsync(Guid wordId)
     {
         var word = await _wordRepository.GetWordById(wordId);
         if (word == null) return false;
+        var categoryIndex = word.CategoryId;
         await _wordRepository.DeleteWord(word);
 
-        await UpdateCategoryWordCounts();
+        UpdateAll();
 
         return true;
     }
@@ -77,7 +79,8 @@ public class WordService
         {
             await SaveWordAsync(word);
         }
-        await UpdateCategoryWordCounts();
+
+        UpdateAll();
     }
 
     public async Task AddSampleWords()

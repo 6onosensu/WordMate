@@ -41,17 +41,20 @@ namespace WordMate.Data
             }
         }
 
-        public async Task UpdateWordCountForCategory(int categoryId)
+        public async Task UpdateWordCountForCategories()
         {
-            var category = await _connection.Table<Category>()
-                .Where(c => c.Id == categoryId)
-                .FirstOrDefaultAsync();
-
-            if (category != null)
+            for (int i = 1; i <= 3; i++)
             {
-                category.WordsCount = await _wordRepository.CountWordsInCategory(categoryId);
+                var category = await _connection.Table<Category>()
+                    .Where(c => c.Id == i)
+                    .FirstOrDefaultAsync();
 
-                await _connection.UpdateAsync(category);
+                if (category != null)
+                {
+                    category.WordsCount = await _wordRepository.CountWordsInCategory(i);
+
+                    await _connection.UpdateAsync(category);
+                }
             }
         }
 

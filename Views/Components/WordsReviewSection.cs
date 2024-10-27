@@ -1,15 +1,17 @@
 ﻿using Microsoft.Maui.Controls;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WordMate.Views.Pages;
 using WordMate.Core.Services;
+using WordMate.Core.Models;
 
 namespace WordMate.Views.Components;
 public class WordsReviewSection : StackLayout
 {
     private WordService _wordService;
     private CarouselView _carouselView;
-    Label _emptyStateLabel;
+    private Label _emptyStateLabel;
     public WordsReviewSection(WordService wordService)
     {
         _wordService = wordService;
@@ -18,12 +20,12 @@ public class WordsReviewSection : StackLayout
 
     private async void InitializeUI()
     {
-        var wordsOnReview = CreateLabel("Words on Review");
-        var carouselWords = await CreateCarousel();
+        var wordsOnReviewLabel = CreateLabel("Words on Review");
+        _carouselView = await CreateCarousel();
         var recallButton = CreateRecallButton();
 
-        Children.Add(wordsOnReview);
-        Children.Add(carouselWords);
+        Children.Add(wordsOnReviewLabel);
+        Children.Add(_carouselView);
         Children.Add(recallButton);
 
         Spacing = 15;
@@ -31,15 +33,25 @@ public class WordsReviewSection : StackLayout
         HorizontalOptions = LayoutOptions.Center;
     }
 
+    private void SetWordsSource(IEnumerable<Word> words)
+    {
+        _carouselView.ItemsSource = words;
+
+        int wordCount;
+        if (words != null)
+        {
+            wordCount = words.Count();
+        }
+        else
+        {
+            wordCount = 0;
+        }
+    }
+
     public async void RefreshCarousel()
     {
-        if (_carouselView == null)
-        {
-            _carouselView = await CreateCarousel();
-            Children.Add(_carouselView);
-        }
         var updatedWords = await _wordService.GetWordsByCategoryAsync(2);
-        _carouselView.ItemsSource = updatedWords;
+        SetWordsSource(updatedWords);
     }
 
     private Label CreateLabel(string text)

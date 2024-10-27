@@ -15,6 +15,6 @@ namespace WordMate.Core.Services
 
         public Task InitializeCategories() => _categoryRepository.InitializeCategories();
 
-        public Task UpdateCountForCategory(int categoryId) => _categoryRepository.UpdateWordCountForCategory(categoryId);
+        public Task UpdateCountForCategories() => _categoryRepository.UpdateWordCountForCategories();
     }
 }
