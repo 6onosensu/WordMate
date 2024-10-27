@@ -52,13 +52,15 @@ public class CategoryGrid : ContentView
                 var stack = new HorizontalStackLayout
                 {
                     Children = { nameLabel, spaceLabel, numberLabel },
+                    HorizontalOptions = LayoutOptions.Center,
                 };
 
                 var frame = new Frame
                 {
                     Content = stack,
                     BorderColor = Color.FromHex("ffbd59"),
-                    Padding = 10
+                    Padding = new Thickness( 30, 10),
+                    HorizontalOptions = LayoutOptions.Fill
                 };
 
                 var tapGestureRecognizer = new TapGestureRecognizer();

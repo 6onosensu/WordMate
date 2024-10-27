@@ -39,11 +39,11 @@ public class WordService
         {
             word.SuccessCount++;
 
-            if (word.CategoryId == 1 && word.SuccessCount <= 3)
+            if (word.CategoryId == 1 && word.SuccessCount <= 2)
             {
                 await ChangeWordCategory(word, 2);
             }
-            else if (word.CategoryId == 2 && word.SuccessCount >= 5)
+            else if (word.CategoryId == 3 && word.SuccessCount >= 5)
             {
                 await ChangeWordCategory(word, 3);
             }
@@ -58,7 +58,6 @@ public class WordService
     {
         var oldCategoryId = word.CategoryId;
         await _wordRepository.ChangeWordCategoryAsync(word.Id, newCategoryId);
-        word.SuccessCount = 0;
     }
 
     public async Task<bool> DeleteWordAsync(Guid wordId)

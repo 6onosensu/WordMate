@@ -39,7 +39,6 @@ public partial class MainPage : ContentPage
         _wordService.SetRefreshManager(_refreshManager);
 
         SetupPage();
-    
     }
 
     protected override async void OnAppearing()
@@ -56,17 +55,13 @@ public partial class MainPage : ContentPage
         _allWordsListView.SetWordsSource(allWords);
         var allCategories = await _categoryService.GetAllCategoriesAsync();
         _categoryGrid.SetListItemSource(allCategories);
+        var reviewCategory = await _wordService.GetWordsByCategoryAsync(2);
+        _wordsReviewSection.SetCarouselSource(reviewCategory);
     }
 
     private void SetupPage()
     {
         var headerView = new HeaderView();
-
-        _categoryGrid = new CategoryGrid(_categoryService, _wordService);
-        _wordsReviewSection = new WordsReviewSection(_wordService);
-        _allWordsListView = new AllWordsListView(_wordService);
-
-
         var mainContent = new StackLayout
         {
             Children =

@@ -21,6 +21,6 @@ public class HeaderView : StackLayout
 
     private async void TapGRTapped(object? sender, TappedEventArgs e)
     {
-        await Navigation.PopAsync();
+        await Navigation.PopToRootAsync();
     }
 }

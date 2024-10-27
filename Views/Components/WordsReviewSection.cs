@@ -33,25 +33,15 @@ public class WordsReviewSection : StackLayout
         HorizontalOptions = LayoutOptions.Center;
     }
 
-    private void SetWordsSource(IEnumerable<Word> words)
+    public void SetCarouselSource(IEnumerable<Word> words)
     {
         _carouselView.ItemsSource = words;
-
-        int wordCount;
-        if (words != null)
-        {
-            wordCount = words.Count();
-        }
-        else
-        {
-            wordCount = 0;
-        }
     }
 
     public async void RefreshCarousel()
     {
         var updatedWords = await _wordService.GetWordsByCategoryAsync(2);
-        SetWordsSource(updatedWords);
+        SetCarouselSource(updatedWords);
     }
 
     private Label CreateLabel(string text)
@@ -66,8 +56,6 @@ public class WordsReviewSection : StackLayout
 
     private async Task<CarouselView> CreateCarousel()
     {
-        var words = await _wordService.GetWordsByCategoryAsync(2);
-
         var carouselView = new CarouselView
         {
             WidthRequest = 400,
@@ -101,10 +89,9 @@ public class WordsReviewSection : StackLayout
 
                 return frame;
             }),
-            PeekAreaInsets = new Thickness(20, 0),
+            //PeekAreaInsets = new Thickness(20, 0),
         };
 
-        carouselView.ItemsSource = words;
         return carouselView;
     }
 
@@ -148,6 +135,7 @@ public class WordsReviewSection : StackLayout
 
         return recallBtn;
     }
+
 
     private async void OnRecallBtnClicked(object? sender, EventArgs e)
     {
