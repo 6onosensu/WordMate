@@ -26,7 +26,7 @@ namespace WordMate.Core.Services
                 await _allWordsListView.LoadWordsAsync();
             }
 
-            //_categoryGrid.Refresh();
+            _categoryGrid.Refresh();
 
             _wordsReviewSection.RefreshCarousel();
         }

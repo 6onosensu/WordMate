@@ -54,6 +54,8 @@ public partial class MainPage : ContentPage
         await _wordService.AddSampleWords();
         var allWords = await _wordService.GetAllWordsAsync();
         _allWordsListView.SetWordsSource(allWords);
+        var allCategories = await _categoryService.GetAllCategoriesAsync();
+        _categoryGrid.SetListItemSource(allCategories);
     }
 
     private void SetupPage()

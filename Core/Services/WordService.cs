@@ -113,6 +113,11 @@ public class WordService
         }
     }
 
+    public async Task<int> CountWordsInCategory(int categoryId)
+    {
+        return await _wordRepository.CountWordsInCategory(categoryId);
+    }
+
     public void SetRefreshManager(RefreshManager refreshManager)
     {
         _refreshManager = refreshManager;
