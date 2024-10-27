@@ -1,27 +1,29 @@
 ﻿using WordMate.Core.Models;
 using WordMate.Core.Services;
+using Microsoft.Maui.Controls;
+using System;
 
 
 namespace WordMate.Views.Components
 {
     public class WordStudyView : StackLayout
     {
-        private Label _wordLbl, _promptLbl;
+        private Label _wordLbl, _promptLbl, _feedbackLbl;
         private Entry _inputEntry;
-        private Button _nextBtn;
+        private Button _checkBtn;
         private Word _currentWord;
         private WordService _wordService;
-        private int _currentStage = 0;
+        private int _currentIndex = 0;
+        private List<Word> _wordsList;
 
-        public WordStudyView(Word currentWord, WordService wordService)
+        public WordStudyView(WordService wordService, List<Word> wordsList)
         {
-            _wordService = wordService; 
-            _currentWord = currentWord;
-
-            var headerView = new HeaderView();
+            _wordService = wordService;
+            _wordsList = wordsList;
 
             _wordLbl = new Label
             {
+                Text = "",
                 FontSize = 24,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
@@ -36,6 +38,15 @@ namespace WordMate.Views.Components
                 VerticalOptions = LayoutOptions.Center
             };
 
+            _feedbackLbl = new Label
+            {
+                Text = "",
+                FontSize = 16,
+                TextColor = Colors.Green,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+
             _inputEntry = new Entry
             {
                 Placeholder = "Input the word",
@@ -45,7 +56,7 @@ namespace WordMate.Views.Components
                 WidthRequest = 200
             };
 
-            _nextBtn = new Button
+            _checkBtn = new Button
             {
                 Text = "Check",
                 FontSize = 18,
@@ -56,7 +67,7 @@ namespace WordMate.Views.Components
                 VerticalOptions = LayoutOptions.Center,
                 WidthRequest = 100
             };
-            _nextBtn.Clicked += OnNextButtonClicked;
+            _checkBtn.Clicked += OnCheckButtonClicked;
 
             var cardFrame = new Frame
             {
@@ -66,7 +77,7 @@ namespace WordMate.Views.Components
                 Padding = 20,
                 Content = new StackLayout
                 {
-                    Children = { _wordLbl, _promptLbl, _inputEntry, _nextBtn },
+                    Children = { _wordLbl, _promptLbl, _inputEntry, _checkBtn },
                     Spacing = 20
                 },
                 HorizontalOptions = LayoutOptions.Center,
@@ -74,39 +85,139 @@ namespace WordMate.Views.Components
                 WidthRequest = 300
             };
 
-            Children.Add(headerView);
             Children.Add(cardFrame);
 
+            var nextBtn = new Button
+            {
+                Text = "Next Word",
+                FontSize = 20,
+                HeightRequest = 60,
+                WidthRequest = 300,
+                Margin = 20,
+                FontAttributes = FontAttributes.Bold,
+                BackgroundColor = Color.FromHex("ffde59"),
+                TextColor = Colors.White,
+                HorizontalOptions = LayoutOptions.Center,
+
+            };
+            nextBtn.Clicked += OnNextBtnKlicked;
+
+            Children.Add(_feedbackLbl);
+            Children.Add(nextBtn);
+
+            LoadWords();
+        }
+
+        public void LoadWords()
+        {
+            _currentWord = _wordsList[_currentIndex];
             UpdateWordDisplay();
+        }
+
+        private void LoadNextWord()
+        {
+            _currentIndex++;
+            if (_currentIndex < _wordsList.Count)
+            {
+                _currentWord = _wordsList[_currentIndex];
+                UpdateWordDisplay();
+            }
+            else
+            {
+                _feedbackLbl.Text = "You've completed all words!";
+                _inputEntry.IsEnabled = false;
+                _checkBtn.IsEnabled = false;
+            }
         }
 
         private void UpdateWordDisplay()
         {
-            switch (_currentStage)
-            {
-                case 1:
-                    _wordLbl.Text = _currentWord.Translation;
-                    _promptLbl.Text = "Input the word:";
-                    _inputEntry.Placeholder = "The word is...";
-                    break;
-                case 2:
-                    _wordLbl.Text = _currentWord.Text;
-                    _promptLbl.Text = "Input the translation:";
-                    _inputEntry.Placeholder = "The translation is...";
-                    break;
-                case 3:
-                    _wordLbl.Text = _currentWord.Definition;
-                    _promptLbl.Text = "Input the word according to the definition:";
-                    _inputEntry.Placeholder = "The word is...";
-                    break;
-            }
+            _feedbackLbl.Text = "";
             _inputEntry.Text = "";
+
+            if (_currentWord.SuccessCount == 0)
+            {
+                _wordLbl.Text = _currentWord.Text;
+                _promptLbl.Text = "Input the translation:";
+                _inputEntry.Placeholder = "The translation is...";
+            }
+            else if (_currentWord.SuccessCount == 1)
+            {
+                _wordLbl.Text = _currentWord.Translation;
+                _promptLbl.Text = "Input the word:";
+                _inputEntry.Placeholder = "The word is...";
+            }
+            else if (_currentWord.SuccessCount >= 2)
+            {
+                _wordLbl.Text = _currentWord.Definition;
+                _promptLbl.Text = "Input the word according to the definition:";
+                _inputEntry.Placeholder = "The word is...";
+            }
         }
 
-        private void OnNextButtonClicked(object sender, EventArgs e)
+        private Boolean IsCorrect()
         {
-            _currentStage = (_currentStage + 1) % 3;
-            UpdateWordDisplay();
+            var userInput = _inputEntry.Text?.Trim().ToLower();
+            var isCorrect = false;
+            var wordSuccess = _currentWord.SuccessCount;
+
+            if (wordSuccess == 0)
+            {
+                isCorrect = userInput == _currentWord.Translation.ToLower();
+            }
+            else if (wordSuccess == 1)
+            {
+                isCorrect = userInput == _currentWord.Text.ToLower();
+            }
+            else if (wordSuccess == 2)
+            {
+                isCorrect = userInput == _currentWord.Text.ToLower();
+            }
+
+            return isCorrect;
+        }
+
+        private async void OnCheckButtonClicked(object sender, EventArgs e)
+        {
+            /*var userInput = _inputEntry.Text?.Trim().ToLower();
+            var isCorrect = false;
+            var wordSuccess = _currentWord.SuccessCount;
+
+            if (wordSuccess == 0)
+            {
+                isCorrect = userInput == _currentWord.Translation.ToLower();
+            }
+            else if (wordSuccess == 1)
+            {
+                isCorrect = userInput == _currentWord.Text.ToLower();
+            }
+            else if (wordSuccess == 2)
+            {
+                isCorrect = userInput == _currentWord.Text.ToLower();
+            }*/
+            if (IsCorrect())
+            {
+                _feedbackLbl.Text = "Correct!";
+                _feedbackLbl.TextColor = Colors.Green;
+
+                //await _wordService.UpdateWordProgress(_currentWord.Id, isCorrect);
+            }
+            else
+            {
+                _feedbackLbl.Text = "Incorrect!";
+                _feedbackLbl.TextColor = Colors.Red;
+            }
+        }
+
+        private async void OnNextBtnKlicked(object sender, EventArgs e)
+        {
+            var isCorrect = IsCorrect();
+            if (isCorrect)
+            {
+                await _wordService.UpdateWordProgress(_currentWord.Id, isCorrect);
+            }
+
+            LoadNextWord();
         }
     }
 }
