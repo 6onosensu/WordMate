@@ -51,10 +51,13 @@ public partial class MainPage : ContentPage
     {
         await _categoryService.InitializeCategories();
         await _wordService.AddSampleWords();
+
         var allWords = await _wordService.GetAllWordsAsync();
         _allWordsListView.SetWordsSource(allWords);
+
         var allCategories = await _categoryService.GetAllCategoriesAsync();
         _categoryGrid.SetListItemSource(allCategories);
+
         var reviewCategory = await _wordService.GetWordsByCategoryAsync(2);
         _wordsReviewSection.SetCarouselSource(reviewCategory);
     }

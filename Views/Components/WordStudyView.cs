@@ -180,27 +180,10 @@ namespace WordMate.Views.Components
 
         private async void OnCheckButtonClicked(object sender, EventArgs e)
         {
-            /*var userInput = _inputEntry.Text?.Trim().ToLower();
-            var isCorrect = false;
-            var wordSuccess = _currentWord.SuccessCount;
-
-            if (wordSuccess == 0)
-            {
-                isCorrect = userInput == _currentWord.Translation.ToLower();
-            }
-            else if (wordSuccess == 1)
-            {
-                isCorrect = userInput == _currentWord.Text.ToLower();
-            }
-            else if (wordSuccess == 2)
-            {
-                isCorrect = userInput == _currentWord.Text.ToLower();
-            }*/
             if (IsCorrect())
             {
                 _feedbackLbl.Text = "Correct!";
                 _feedbackLbl.TextColor = Colors.Green;
-                //await _wordService.UpdateWordProgress(_currentWord.Id, isCorrect);
             }
             else
             {
